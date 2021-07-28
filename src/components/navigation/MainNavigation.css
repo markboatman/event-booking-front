@@ -1,0 +1,60 @@
+.main-navigation {
+  /* This will "position: fixed" the nav bar but elements after it on
+    the page will not take into consideration is is there,
+    so things will be hidden underneath the nav bar if you
+    do not adjust what comes under it.
+    */
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 3.5rem;
+  background: rgb(97, 156, 211);
+  /* relative to the font size of the <html> element */
+  padding: 0 1rem;
+  /* direct children are now inline */
+  display: flex;
+  /* if display is flex, centers on the y axix */
+  align-items: center;
+}
+
+.main-navigation__logo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.main-navigation__items {
+  margin-left: 1.5rem;
+}
+
+.main-navigation__items ul {
+  /* make children inline */
+  display: flex;
+  margin: 0;
+  padding: 0;
+  /* get rid of bullets */
+  list-style: none; 
+}
+
+.main-navigation__items li {
+  margin: 0 1rem;
+}
+
+.main-navigation__items a {
+  /* NavLink is a type of a */
+  /* get rid of underlines */
+  text-decoration: none;
+  color: #000;
+}
+
+/* multiple selectors, one property set */
+.main-navigation__items a:hover, 
+.main-navigation__items a:active,
+/* whenever NavLink (a) has a className="active" defined 
+  This is default behavior for a React NavLink, look at element
+  inspector
+  */
+.main-navigation__items a.active {
+  color: yellow;
+}
+

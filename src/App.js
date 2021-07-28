@@ -1,24 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import AuthPage from './pages/AuthPage';
+import BookingsPage from './pages/BookingsPage';
+import EventsPage from './pages/EventsPage';
+import MainNavigation from './components/navigation/MainNavigation';
 
+// The tutorial maker this a class: class App extends Component { }
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    /* this is one way to make a one page react app */
+    <BrowserRouter>
+      <MainNavigation />
+      <main className="main-content"> {/* main is optional */}
+        {/* use Switch to jump directly to url match
+          Don't go through the sequence
+      */}
+        <Switch>
+          {/* need to use exact on "/ nothing"*/}
+          <Redirect from="/" to="/auth" exact />
+          <Route path="/auth" component={AuthPage} />
+          <Route path="/events" component={EventsPage} />
+          <Route path="/bookings" component={BookingsPage} />
+        </Switch>
+      </main>
+    </BrowserRouter>
   );
 }
 
