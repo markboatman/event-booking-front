@@ -1,7 +1,7 @@
-Use this to init the react frontend project from the root, tool likes root dir to be empty, maybe create a node_modules folder in the root dir first and tell dropbox not to sync:
+Use below to init the react frontend project from the root, tool likes root dir to be empty, maybe create a node_modules folder in the root dir first and tell dropbox not to sync:
   npx create-react-app .
 
-Deleted several files some code from the default react app that was created. See Video 11.
+Deleted several files from the default react app that was created. See Video 11.
 
 To run, from root dir:
   npm start
@@ -16,3 +16,10 @@ To address issues that do not require attention, run:
   npm audit fix
 
 Ran npm audit fix but did not seem to work.
+
+To start app run:
+  npm start
+Should start a dev server and index.html will run in a browser
+Initial url is localhost:3000 which will redirect to /auth
+
+Entry point for app is index.html -> index.js -> app.js

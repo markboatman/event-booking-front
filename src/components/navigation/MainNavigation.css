@@ -51,8 +51,8 @@
 .main-navigation__items a:hover, 
 .main-navigation__items a:active,
 /* whenever NavLink (a) has a className="active" defined 
-  This is default behavior for a React NavLink, look at element
-  inspector
+  A React NavLink element gets a class="active" when it becomes active,
+   look at element inspector
   */
 .main-navigation__items a.active {
   color: yellow;

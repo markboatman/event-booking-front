@@ -8,5 +8,6 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
+  // second param to render
   document.getElementById('root')
 );
