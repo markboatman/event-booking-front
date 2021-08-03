@@ -47,13 +47,13 @@
   color: #000;
 }
 
-/* multiple selectors, one property set */
+/* 3 selectors, one property set */
 .main-navigation__items a:hover, 
 .main-navigation__items a:active,
 /* whenever NavLink (a) has a className="active" defined 
   A React NavLink element gets a class="active" when it becomes active,
    look at element inspector
-  */
+*/
 .main-navigation__items a.active {
   color: yellow;
 }
