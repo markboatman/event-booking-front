@@ -1,32 +1,65 @@
 import './App.css';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import AuthContext from './context/auth-context';
 import AuthPage from './pages/AuthPage';
 import BookingsPage from './pages/BookingsPage';
 import EventsPage from './pages/EventsPage';
 import MainNavigation from './components/navigation/MainNavigation';
+import { Component } from 'react';
 
-// The tutorial makes this a class: class App extends Component { }
-function App() {
-  return (
-    /* this is one way to make a one page react app */
-    <BrowserRouter>
-      {/* user <React.Fragment /> here in tutorial */}
-      <MainNavigation />
-      <main className="main-content"> {/* <main> is optional */}
-      This is the main-content section
-        {/* use Switch to jump directly to url match
-          Don't go through the sequence
-        */}
-        <Switch>
-          {/* need to use exact on "/ nothing"*/}
-          <Redirect from="/" to="/auth" exact />
-          <Route path="/auth" component={AuthPage} />
-          <Route path="/events" component={EventsPage} />
-          <Route path="/bookings" component={BookingsPage} />
-        </Switch>
-      </main>
-    </BrowserRouter>
-  );
+class App extends Component {
+  state = {
+    token: null,
+    userId: null,
+  };
+
+  login = (token, userId, tokenExpiration) => {
+    this.setState({ token: token, userId: userId });
+  };
+
+  logout = () => {
+    this.setState({ token: null, userId: null });
+  };
+
+  render() {
+    return (
+      /* this is one way to make a one page react app */
+      <BrowserRouter>
+        {/* user <React.Fragment /> here in tutorial */}
+        {/* you have to intialize the context by setting prop value= */}
+        <AuthContext.Provider
+          value={{
+            token: this.state.token,
+            userId: this.state.userId,
+            login: this.login,
+            logout: this.logout,
+          }}
+        >
+          {/* this is the menu bar */}
+          <MainNavigation />
+          <main className="main-content">
+            {' '}
+            {/* <main> is optional */}
+            This is the main-content section
+            {/* use Switch to jump directly to url match
+            Don't go through the sequence
+          */}
+            <Switch>
+              {/* need to use exact on "/ nothing"*/}
+              {!this.state.token && <Redirect from="/" to="/auth" exact />}
+              {this.state.token && <Redirect from="/" to="/events" exact />}
+              {this.state.token && <Redirect from="/auth" to="events" exact />}
+              {!this.state.token && <Route path="/auth" component={AuthPage} />}
+              <Route path="/events" component={EventsPage} />
+              {this.state.token && (
+                <Route path="/bookings" component={BookingsPage} />
+              )}
+            </Switch>
+          </main>
+        </AuthContext.Provider>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;

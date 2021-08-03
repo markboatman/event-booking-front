@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import AuthContext from '../context/auth-context';
 import './AuthPage.css';
 
 class AuthPage extends Component {
@@ -7,7 +7,21 @@ class AuthPage extends Component {
     // AuthPage is in login mode initially
     isLogin: true,
   };
-
+  /*
+    from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
+    Static properties are useful for caches, fixed-configuration, 
+    or any other data you don't need to be replicated across instances
+  */  
+  static contextType = AuthContext;
+  /* 
+    AuthContext looks like this in context/auth-context
+    {
+      token: null,
+      userId: null,
+      login: () => {},
+      logout: () => {}
+    }
+  */
   constructor(props) {
     super(props);
     // using React reference api methods for accessing/watching elements
@@ -104,6 +118,13 @@ class AuthPage extends Component {
       })
       .then((resJson) => {
         console.log(resJson);
+        if( resJson.data.login.tokenString /* && this.isLogin */ ) {
+          // get the token
+          this.context.login(resJson.data.login.tokenString, 
+                        resJson.data.login.userId,
+                        resJson.data.tokenExpiration);
+        }
+
       })
       .catch((err) => {
         console.log(err.message);
