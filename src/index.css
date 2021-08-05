@@ -5,9 +5,12 @@ body {
 }
 
 .form-control label,
-.form-control input {
+.form-control input,
+.form-control textarea {
   width: 100%;
-  /* labels and input are inline by default */
+  /* labels and input are inline by default.
+    Stack them vertically
+  */
   display: block;
 }
 
