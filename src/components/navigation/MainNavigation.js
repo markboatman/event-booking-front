@@ -6,6 +6,10 @@ import './MainNavigation.css';
 
 // this is a functional component, we do not
 // need to have a state
+/* 
+  set up the imported AuthContext element as a parent to deliver
+    AuthContext state and methods to decendants
+*/
 const MainNavigation = (props) => (
   <AuthContext.Consumer>
     {(context) => {
@@ -27,9 +31,14 @@ const MainNavigation = (props) => (
                 <NavLink to="/events">Events</NavLink>
               </li>
               {context.token && (
-                <li>
-                  <NavLink to="/bookings">Bookings</NavLink>
-                </li>
+                <React.Fragment>
+                  <li>
+                    <NavLink to="/bookings">Bookings</NavLink>
+                  </li>
+                  <li>
+                    <button onClick={context.logout}>Logout</button>
+                  </li>
+                </React.Fragment>
               )}
             </ul>
           </nav>

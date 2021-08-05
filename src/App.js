@@ -26,7 +26,10 @@ class App extends Component {
       /* this is one way to make a one page react app */
       <BrowserRouter>
         {/* user <React.Fragment /> here in tutorial */}
-        {/* you have to intialize the context by setting prop value= */}
+        {/* you have to intialize the context by setting prop value= 
+          Context is defined and available to all decendants of the
+          element AuthContext.
+        */}
         <AuthContext.Provider
           value={{
             token: this.state.token,
@@ -40,20 +43,23 @@ class App extends Component {
           <main className="main-content">
             {' '}
             {/* <main> is optional */}
-            This is the main-content section
+            {/* This is the main-content section */}
             {/* use Switch to jump directly to url match
             Don't go through the sequence
           */}
             <Switch>
               {/* need to use exact on "/ nothing"*/}
-              {!this.state.token && <Redirect from="/" to="/auth" exact />}
               {this.state.token && <Redirect from="/" to="/events" exact />}
-              {this.state.token && <Redirect from="/auth" to="events" exact />}
+              {!this.state.token && (
+                <Redirect from="bookings" to="/auth" exact />
+              )}
               {!this.state.token && <Route path="/auth" component={AuthPage} />}
+              {this.state.token && <Redirect from="/auth" to="events" exact />}
               <Route path="/events" component={EventsPage} />
               {this.state.token && (
                 <Route path="/bookings" component={BookingsPage} />
               )}
+              {!this.state.token && <Redirect to="/auth" exact />}
             </Switch>
           </main>
         </AuthContext.Provider>

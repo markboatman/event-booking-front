@@ -1,0 +1,40 @@
+.modal {
+  /* small screens */
+  max-width: 90%;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  position: fixed;
+  /* 20% of viewport height */
+  top: 20vh;
+  /* to center */
+  left: 5%;
+}
+
+.modal__header {
+  padding: 0.3rem 1rem;
+  background: rgb(97, 156, 211);
+  color: white;
+}
+
+.modal_header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.modal__content {
+  padding: 1rem;
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 768px) {
+  /* larger screens */
+  .modal {
+    width: 30rem;
+    /* to center */
+    left: calc((100% - 30rem) / 2);
+  }
+}

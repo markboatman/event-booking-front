@@ -30,31 +30,43 @@
 .main-navigation__items ul {
   /* make children inline */
   display: flex;
+  /* center inline children */
+  align-items: center;
   margin: 0;
   padding: 0;
   /* get rid of bullets */
-  list-style: none; 
+  list-style: none;
 }
 
 .main-navigation__items li {
   margin: 0 1rem;
 }
 
-.main-navigation__items a {
+.main-navigation__items a,
+.main-navigation__items button {
   /* NavLink is a type of a */
   /* get rid of underlines */
   text-decoration: none;
-  color: #000;
+  color: white;
+  font: inherit;
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  margin: 0;
 }
 
 /* 3 selectors, one property set */
 .main-navigation__items a:hover, 
 .main-navigation__items a:active,
+.main-navigation__items button:hover, 
+.main-navigation__items button:active,
 /* whenever NavLink (a) has a className="active" defined 
   A React NavLink element gets a class="active" when it becomes active,
    look at element inspector
 */
 .main-navigation__items a.active {
-  color: yellow;
+  background: white;
+  color: blue;
+  border-radius: 3px;
 }
-

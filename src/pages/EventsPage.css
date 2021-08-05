@@ -1,0 +1,9 @@
+.events-control {
+  /* put children in the middle */
+  text-align: center;
+  border: 1px solid rgb(97, 156, 211);
+  padding: 1rem;
+  margin: 2rem auto;
+  width: 30rem;
+  max-width: 80%;
+}
