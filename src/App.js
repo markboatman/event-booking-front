@@ -26,7 +26,8 @@ class App extends Component {
       /* this is one way to make a one page react app */
       <BrowserRouter>
         {/* user <React.Fragment /> here in tutorial */}
-        {/* you have to intialize the context by setting prop value= 
+        {/* 
+          You have to intialize the context by setting prop value= 
           Context is defined and available to all decendants of the
           element AuthContext.
         */}
