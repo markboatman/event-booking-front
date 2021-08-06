@@ -7,6 +7,7 @@ import AuthContext from '../context/auth-context';
 class EventsPage extends Component {
   state = {
     creating: false,
+    events: [],
   };
   // This will create the class property "this.context"
   // Do not have to create this.context directly. Below
@@ -19,6 +20,11 @@ class EventsPage extends Component {
     this.priceElRef = React.createRef();
     this.dateElRef = React.createRef();
     this.descriptionElRef = React.createRef();
+  }
+
+  // React gives us this lifecycle methond
+  componentDidMount() {
+    this.fetchEvents();
   }
 
   showCreateEventHandler = () => {
@@ -103,6 +109,7 @@ class EventsPage extends Component {
       })
       .then((resJson) => {
         console.log(resJson);
+        this.fetchEvents();
       })
       .catch((err) => {
         console.log(err.message);
@@ -113,7 +120,57 @@ class EventsPage extends Component {
     this.setState({ creating: false });
   };
 
+  fetchEvents = () => {
+    const reqBody = {
+      query: `
+        query {
+        events {
+          title
+          description
+          date
+          price
+        }
+      }
+      `,
+    };
+
+    // using standard fetch
+    fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      body: JSON.stringify(reqBody),
+      headers: {
+        // tell receiver what format we are sending
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        // console.log('res.status: ', res.status);
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Request to server failed!');
+        }
+        // else
+        // this will return a promise so we can "then" it
+        return res.json();
+      })
+      .then((resJson) => {
+        console.log(resJson);
+        const events = resJson.data.events;
+        this.setState({ events: events });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   render() {
+    const eventList = this.state.events.map((event) => {
+      return (
+        <li key={event._id} className="events__list-item">
+          {event.title}
+        </li>
+      );
+    });
+
     // return some jsx
     return (
       <React.Fragment>
@@ -162,6 +219,7 @@ class EventsPage extends Component {
             </button>
           </div>
         )}
+        <ul className="events__list">{eventList}</ul>
       </React.Fragment>
     );
   }
