@@ -3,10 +3,12 @@ import './EventsPage.css';
 import Modal from '../components/modal/Modal';
 import Backdrop from '../components/backdrop/Backdrop';
 import AuthContext from '../context/auth-context';
+import EventList from '../components/events/EventList';
 
 class EventsPage extends Component {
   state = {
     creating: false,
+    // populated by componentDidMount()
     events: [],
   };
   // This will create the class property "this.context"
@@ -31,7 +33,7 @@ class EventsPage extends Component {
     this.setState({ creating: true });
   };
 
-  modalConfirmHandler = () => {
+  modalCreateEventHandler = () => {
     this.setState({ creating: false });
     const title = this.titleElRef.current.value;
     const description = this.descriptionElRef.current.value;
@@ -77,7 +79,7 @@ class EventsPage extends Component {
 
     /*
       On modern browsers, if you make a request to a server ( NOT localhost:3000) that did not give you 
-      this javascript , this code will running on the users browser will check
+      this javascript , this code running on the users browser will check
       the response to the fetch and look for response headers coming from the other server (localhost:4000)
       stating that cross-origin requests are okay. Need to set this up on the graphql server
 
@@ -109,7 +111,16 @@ class EventsPage extends Component {
       })
       .then((resJson) => {
         console.log(resJson);
-        this.fetchEvents();
+        this.setState((prefState) => {
+          // expand the events array and copy
+          const updatedEvents = [...prefState.events];
+          console.log('Created event is: ', resJson.data.createEvent);
+
+          updatedEvents.push(resJson.data.createEvent);
+          //console.log('New events: ', updatedEvents);
+          return { events: updatedEvents };
+        });
+        console.log('local events after addition: ', this.state.events);
       })
       .catch((err) => {
         console.log(err.message);
@@ -125,10 +136,15 @@ class EventsPage extends Component {
       query: `
         query {
         events {
+          _id
           title
           description
           date
           price
+          creator {
+            _id
+            email
+          }
         }
       }
       `,
@@ -154,6 +170,7 @@ class EventsPage extends Component {
       })
       .then((resJson) => {
         console.log(resJson);
+        console.log('Can see creator? ', resJson.data.events[0].creator._id);
         const events = resJson.data.events;
         this.setState({ events: events });
       })
@@ -163,14 +180,6 @@ class EventsPage extends Component {
   };
 
   render() {
-    const eventList = this.state.events.map((event) => {
-      return (
-        <li key={event._id} className="events__list-item">
-          {event.title}
-        </li>
-      );
-    });
-
     // return some jsx
     return (
       <React.Fragment>
@@ -181,7 +190,7 @@ class EventsPage extends Component {
             canCancel
             canConfirm
             onCancel={this.modalCancelHandler}
-            onConfirm={this.modalConfirmHandler}
+            onConfirm={this.modalCreateEventHandler}
           >
             <form>
               <div className="form-control">
@@ -219,7 +228,10 @@ class EventsPage extends Component {
             </button>
           </div>
         )}
-        <ul className="events__list">{eventList}</ul>
+        <EventList
+          events={this.state.events}
+          authUserId={this.context.userId}
+        />
       </React.Fragment>
     );
   }

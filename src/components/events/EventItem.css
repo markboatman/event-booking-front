@@ -1,0 +1,26 @@
+.event__list-item {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid rgb(97, 156, 211);
+  /* this element is a flex parent */
+  display: flex;
+  flex-direction: row;
+  /* push things to the edge filling with space */
+  justify-content: space-between;
+}
+
+.event__list-item h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: rgb(71, 141, 207);
+}
+
+.event__list-item h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: rgb(99, 95, 95);
+}
+
+.event__list-item p {
+  margin: 0;
+}

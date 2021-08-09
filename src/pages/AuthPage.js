@@ -9,9 +9,11 @@ class AuthPage extends Component {
   };
   /*
     from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
-    Static properties are useful for caches, fixed-configuration, 
+    STATIC PROPERTIES are useful for caches, fixed-configuration, 
     or any other data you don't need to be replicated across instances
-  */  
+  */
+  // this declaration, using AuthContext will make the var "this.context"
+  // available in this scope
   static contextType = AuthContext;
   /* 
     AuthContext looks like this in context/auth-context
@@ -51,14 +53,14 @@ class AuthPage extends Component {
     if (email.trim().length === 0 || password.trim().length === 0) {
       return; // don't do anything
     }
-    console.log(
-      'AuthPage.submitHandler, email: ',
-      email,
-      ' password: ',
-      password
-    );
+    // console.log(
+    //   'AuthPage.submitHandler, email: ',
+    //   email,
+    //   ' password: ',
+    //   password
+    // );
 
-    // default req will be login
+    // default req will be login config
     let reqBody = {
       query: `
         mutation {
@@ -118,13 +120,22 @@ class AuthPage extends Component {
       })
       .then((resJson) => {
         console.log(resJson);
-        if( resJson.data.login.tokenString /* && this.isLogin */ ) {
-          // get the token
-          this.context.login(resJson.data.login.tokenString, 
-                        resJson.data.login.userId,
-                        resJson.data.tokenExpiration);
+        if (
+          this.state.isLogin &&
+          resJson.data.login.tokenString /* && this.isLogin */
+        ) {
+          // set the App.state to logged in.
+          this.context.login(
+            // this data is from the backend
+            resJson.data.login.tokenString,
+            resJson.data.login.userId,
+            // this is from the Auth middleware
+            resJson.data.login.tokenExpiration
+          );
+          console.log('User logged in: ', resJson.data.login);
+        } else {
+          console.log('User created: ', resJson.data.createUser);
         }
-
       })
       .catch((err) => {
         console.log(err.message);

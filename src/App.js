@@ -1,3 +1,4 @@
+// you are at video 17@19:45
 import './App.css';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import AuthContext from './context/auth-context';
@@ -11,14 +12,19 @@ class App extends Component {
   state = {
     token: null,
     userId: null,
+    tokenExpiration: null,
   };
 
   login = (token, userId, tokenExpiration) => {
-    this.setState({ token: token, userId: userId });
+    this.setState({
+      token: token,
+      userId: userId,
+      tokenExpiration: tokenExpiration,
+    });
   };
 
   logout = () => {
-    this.setState({ token: null, userId: null });
+    this.setState({ token: null, userId: null, tokenExpiration: null });
   };
 
   render() {
@@ -27,7 +33,7 @@ class App extends Component {
       <BrowserRouter>
         {/* user <React.Fragment /> here in tutorial */}
         {/* 
-          You have to intialize the context by setting prop value= 
+          You have to intialize the context by setting value={ ... }
           Context is defined and available to all decendants of the
           element AuthContext.
         */}
