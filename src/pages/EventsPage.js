@@ -191,7 +191,53 @@ class EventsPage extends Component {
     });
   };
 
-  bookEventHandler = (eventId) => {};
+  bookEventHandler = (eventId) => {
+    if (!this.context.token) {
+      this.setState({ selectedEvent: null });
+      return;
+    }
+
+    const reqBody = {
+      query: `
+        mutation {
+        bookEvent(eventId: "${this.state.selectedEvent._id}") {
+          _id
+          createdAt
+          updatedAt
+        }
+      }
+      `,
+    };
+
+    // using standard fetch
+    fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      body: JSON.stringify(reqBody),
+      headers: {
+        // tell receiver what format we are sending
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.context.token,
+      },
+    })
+      .then((res) => {
+        // console.log('res.status: ', res.status);
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Request to server failed!');
+        }
+        // else
+        // this will return a promise so we can "then" it
+        return res.json();
+      })
+      .then((resJson) => {
+        // console.log(resJson);
+        const eventBooking = resJson.data.bookEvent;
+        console.log(eventBooking);
+        this.setState({ selectedEvent: null });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
   render() {
     // return some jsx
@@ -243,7 +289,7 @@ class EventsPage extends Component {
             canConfirm
             onCancel={this.modalCancelHandler}
             onConfirm={this.bookEventHandler}
-            confirmText="Book Event"
+            confirmText={this.context.token ? 'Book Event' : 'Confirm'}
           >
             <h2>
               ${this.state.selectedEvent.price} -{' '}
