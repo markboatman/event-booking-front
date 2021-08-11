@@ -14,6 +14,9 @@ class EventsPage extends Component {
     isLoading: false,
     selectedEvent: null,
   };
+
+  isActive = true;
+
   // This will create the class property "this.context"
   // Do not have to create this.context directly. Below
   // does it for us
@@ -174,13 +177,16 @@ class EventsPage extends Component {
       })
       .then((resJson) => {
         // console.log(resJson);
-        // console.log('Can see creator? ', resJson.data.events[0].creator._id);
         const events = resJson.data.events;
-        this.setState({ events: events, isLoading: false });
+        if (this.isActive) {
+          this.setState({ events: events, isLoading: false });
+        }
       })
       .catch((err) => {
         console.log(err.message);
-        this.setState({ isLoading: false });
+        if (this.isActive) {
+          this.setState({ isLoading: false });
+        }
       });
   };
 
@@ -231,13 +237,17 @@ class EventsPage extends Component {
       .then((resJson) => {
         // console.log(resJson);
         const eventBooking = resJson.data.bookEvent;
-        console.log(eventBooking);
+        console.log('Event booked: ', eventBooking);
         this.setState({ selectedEvent: null });
       })
       .catch((err) => {
         console.log(err.message);
       });
   };
+  // React supplied
+  componentWillUnmount() {
+    this.isActive = false;
+  }
 
   render() {
     // return some jsx

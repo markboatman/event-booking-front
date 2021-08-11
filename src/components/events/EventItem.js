@@ -2,7 +2,7 @@ import React from 'react';
 import './EventItem.css';
 
 const EventItem = (props) => {
-  console.log('curUserId: ', props.curUserId, ' creatorId : ', props.creatorId);
+  // console.log('curUserId: ', props.curUserId, ' creatorId : ', props.creatorId);
   return (
     <li key={props.eventId} className="event__list-item">
       <div>
