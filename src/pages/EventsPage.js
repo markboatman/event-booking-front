@@ -246,6 +246,7 @@ class EventsPage extends Component {
   };
   // React supplied
   componentWillUnmount() {
+    // not sure what this is doing
     this.isActive = false;
   }
 
