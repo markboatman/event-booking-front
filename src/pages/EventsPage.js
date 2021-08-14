@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './EventsPage.css';
-import Modal from '../components/modal/Modal';
 import Backdrop from '../components/backdrop/Backdrop';
-import AuthContext from '../context/auth-context';
 import EventList from '../components/events/EventList';
+import Modal from '../components/modal/Modal';
 import Spinner from '../components/spinner/Spinner';
+import AuthContext from '../context/auth-context';
+import './EventsPage.css';
 
 class EventsPage extends Component {
   state = {
@@ -56,18 +56,18 @@ class EventsPage extends Component {
       return;
     }
     // else
-    // construct an event object with input data
+    // construct an event object with input data, ES6 syntax
     const event = { title, description, price, date };
     console.log(event);
 
     const reqBody = {
       query: `
-        mutation {
+        mutation CreateEvent($title: String!, $desc: String!, $price: Float!, $date: String!) {
         createEvent(eventInput: {
-          title: "${title}"
-          description: "${description}"
-          price: ${price}
-          date: "${date}"
+          title: $title
+          description: $desc
+          price: $price
+          date: $date
         }) {
             _id
             title
@@ -81,6 +81,12 @@ class EventsPage extends Component {
           }
         }
       `,
+      variables: {
+        title: title,
+        desc: description,
+        price: price,
+        date: date,
+      },
     };
 
     /*
@@ -181,6 +187,7 @@ class EventsPage extends Component {
         if (this.isActive) {
           this.setState({ events: events, isLoading: false });
         }
+        console.log('Got events for events page: ', events);
       })
       .catch((err) => {
         console.log(err.message);
@@ -205,14 +212,17 @@ class EventsPage extends Component {
 
     const reqBody = {
       query: `
-        mutation {
-        bookEvent(eventId: "${this.state.selectedEvent._id}") {
+        mutation BookEvent($Id: ID!) {
+        bookEvent(eventId: $Id) {
           _id
           createdAt
           updatedAt
         }
       }
       `,
+      variables: {
+        Id: this.state.selectedEvent._id,
+      },
     };
 
     // using standard fetch

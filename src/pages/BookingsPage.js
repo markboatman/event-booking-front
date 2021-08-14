@@ -67,9 +67,19 @@ class BookingsPage extends Component {
   cancelBookingHandler = (bookingId) => {
     this.setState({ isLoading: true });
     const reqBody = {
+      /*
+        Using gql recommended method for variable value injections.
+        Name the query or mutation after query/mutation keyword and
+        set reference the passed in parameter(s) with type.
+        Re-factor variable ref in query/mutation, i.e. no "${}" just
+        $var-name.
+        Add second field (variables:) to the reqBody that sets up/defines the 
+        parameter/var references for graphql.
+        */
+
       query: `
-        mutation {
-        cancelBooking(bookingId: "${bookingId}") {
+        mutation CancelBooking($id: ID!) {
+        cancelBooking(bookingId: $id) {
           _id
           createdAt
           event {
@@ -80,6 +90,10 @@ class BookingsPage extends Component {
         }
       }
       `,
+      variables: {
+        // bookingId is being passed in to this handler
+        id: bookingId,
+      },
     };
 
     // using standard fetch

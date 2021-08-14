@@ -63,27 +63,35 @@ class AuthPage extends Component {
     // default req will be login config
     let reqBody = {
       query: `
-        mutation {
-          login(email: "${email}", password: "${password}") {
+        mutation Login( $email: String!, $password: String! ) {
+          login(email: $email, password: $password) {
             userId
             tokenString
             tokenExpiration
           }
         }
       `,
+      variables: {
+        email: email,
+        password: password,
+      },
     };
 
     if (!this.state.isLogin) {
       // set up create user
       reqBody = {
         query: `
-        mutation {
-          createUser(userInput: { email: "${email}", password: "${password}" } ) {
+        mutation CreateUser( $email: String!, $password: String! ) {
+          createUser(userInput: { email: $email, password: $password } ) {
             _id
             email
           }
         }
       `,
+        variables: {
+          email: email,
+          password: password,
+        },
       };
     }
 
