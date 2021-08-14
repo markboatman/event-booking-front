@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import AuthContext from '../context/auth-context';
 import Spinner from '../components/spinner/Spinner';
-import BookingsList from '../components/bookings/BookingList';
+import BookingsList from '../components/bookings/BookingsList';
+import BookingsChart from '../components/bookings/BookingsChart';
 
 class BookingsPage extends Component {
   state = {
     isLoading: false,
     bookings: [],
+    contentType: 'list',
   };
   // make context available
   static contextType = AuthContext;
@@ -132,20 +134,42 @@ class BookingsPage extends Component {
       });
   };
 
+  changeContentHandler = (contentType) => {
+    if (contentType === 'list') {
+      this.setState({ contentType: 'list' });
+    } else {
+      this.setState({ contentType: 'chart' });
+    }
+  };
+
   render() {
+    let content = <Spinner />;
+    if (!this.state.isLoading) {
+      content = (
+        <React.Fragment>
+          <div>
+            <button onClick={this.changeContentHandler.bind(this, 'list')}>
+              Your Bookings
+            </button>
+            <button onClick={this.changeContentHandler.bind(this, 'chart')}>
+              Bookings Costs
+            </button>
+          </div>
+          <div>
+            {this.state.contentType === 'list' ? (
+              <BookingsList
+                bookings={this.state.bookings}
+                onCancelBooking={this.cancelBookingHandler}
+              />
+            ) : (
+              <BookingsChart bookings={this.state.bookings} />
+            )}
+          </div>
+        </React.Fragment>
+      );
+    }
     // return some jsx
-    return (
-      <React.Fragment>
-        {this.state.isLoading ? (
-          <Spinner />
-        ) : (
-          <BookingsList
-            bookings={this.state.bookings}
-            onCancelBooking={this.cancelBookingHandler}
-          />
-        )}
-      </React.Fragment>
-    );
+    return <React.Fragment>{content}</React.Fragment>;
   }
 }
 
