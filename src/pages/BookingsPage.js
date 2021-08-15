@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AuthContext from '../context/auth-context';
 import Spinner from '../components/spinner/Spinner';
 import BookingsList from '../components/bookings/BookingsList';
+import BookingsControl from '../components/bookings/BookingsControl';
 import BookingsChart from '../components/bookings/BookingsChart';
 
 class BookingsPage extends Component {
@@ -28,6 +29,7 @@ class BookingsPage extends Component {
           event {
             _id
             title
+            price
             date
           }
         }
@@ -147,14 +149,10 @@ class BookingsPage extends Component {
     if (!this.state.isLoading) {
       content = (
         <React.Fragment>
-          <div>
-            <button onClick={this.changeContentHandler.bind(this, 'list')}>
-              Your Bookings
-            </button>
-            <button onClick={this.changeContentHandler.bind(this, 'chart')}>
-              Bookings Costs
-            </button>
-          </div>
+          <BookingsControl
+            activeContentType={this.state.contentType}
+            changeContentHandler={this.changeContentHandler}
+          />
           <div>
             {this.state.contentType === 'list' ? (
               <BookingsList
