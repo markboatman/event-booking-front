@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AuthContext from '../context/auth-context';
+import AuthContext from '../components/context/auth-context';
 import './AuthPage.css';
 
 class AuthPage extends Component {
@@ -107,6 +107,7 @@ class AuthPage extends Component {
 
     // using standard fetch
     fetch('http://localhost:4000/graphql', {
+      // I think everything has to be a POST to graphql server
       method: 'POST',
       body: JSON.stringify(reqBody),
       headers: {
@@ -140,8 +141,10 @@ class AuthPage extends Component {
             // this is from the Auth middleware
             resJson.data.login.tokenExpiration
           );
+          // set up feedback to the u.i. logged in
           console.log('User logged in: ', resJson.data.login);
         } else {
+          // set up feedback to the u.i. created but still need to login
           console.log('User created: ', resJson.data.createUser);
         }
       })

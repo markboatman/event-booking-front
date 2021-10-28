@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AuthContext from '../context/auth-context';
+import AuthContext from '../components/context/auth-context';
 import Spinner from '../components/spinner/Spinner';
 import BookingsList from '../components/bookings/BookingsList';
 import BookingsControl from '../components/bookings/BookingsControl';

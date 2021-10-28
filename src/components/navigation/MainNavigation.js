@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 // my imports
-import AuthContext from '../../context/auth-context';
+import AuthContext from '../context/auth-context';
 import './MainNavigation.css';
 
 // this is a functional component, we do not

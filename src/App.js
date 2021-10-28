@@ -1,7 +1,7 @@
 // you are at video 17@19:45
 import './App.css';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
-import AuthContext from './context/auth-context';
+import AuthContext from './components/context/auth-context';
 import AuthPage from './pages/AuthPage';
 import BookingsPage from './pages/BookingsPage';
 import EventsPage from './pages/EventsPage';
