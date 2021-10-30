@@ -40,3 +40,15 @@ Should start a dev server and index.html will run in a browser
 Initial url is localhost:3000 which will redirect to /auth
 
 Entry point for app is index.html -> index.js -> app.js
+
+To make a production build do this:
+yarn build
+
+This will create a build dir in your project with your code.
+You need to exec it with a static? server, so do this to install globally:
+npm install -g server
+OR
+yarn global add serve
+
+Then exec from project folder that contains ./build:
+serve -s build

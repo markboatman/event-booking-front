@@ -106,7 +106,7 @@ class AuthPage extends Component {
     */
 
     // using standard fetch
-    fetch('http://localhost:4000/graphql', {
+    fetch(process.env.REACT_APP_BACKEND_URL + '/graphql', {
       // I think everything has to be a POST to graphql server
       method: 'POST',
       body: JSON.stringify(reqBody),
