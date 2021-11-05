@@ -40,6 +40,7 @@ class EventsPage extends Component {
   };
 
   modalCreateEventHandler = () => {
+    console.log('In EventsPage, modalCreateEventHandler');
     this.setState({ creating: false });
     const title = this.titleElRef.current.value;
     const description = this.descriptionElRef.current.value;

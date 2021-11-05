@@ -1,1 +1,4 @@
-Get rid of text modules in package.json and node_modules, causing npm errors
+Working against heroku backend, adding error message on
+bad login.
+
+In the AuthPage trying to figure out how auth-context works.

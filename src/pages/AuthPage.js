@@ -6,6 +6,7 @@ class AuthPage extends Component {
   state = {
     // AuthPage is in login mode initially
     isLogin: true,
+    feedback: '',
   };
   /*
     from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
@@ -16,8 +17,11 @@ class AuthPage extends Component {
   // available in this scope
   static contextType = AuthContext;
   /* 
-    AuthContext looks like this in context/auth-context
+    AuthContext looks like this in context/auth-context, 
+    Properties are actually set in App.js when we instanciate
+    the myContext.Provider
     {
+      // these are set for code completion in the editor
       token: null,
       userId: null,
       login: () => {},
@@ -37,7 +41,7 @@ class AuthPage extends Component {
 
   switchModeHandler = () => {
     this.setState((prevState) => {
-      return { isLogin: !prevState.isLogin };
+      return { isLogin: !prevState.isLogin, feedback: '' };
     });
   };
 
@@ -57,7 +61,7 @@ class AuthPage extends Component {
     //   'AuthPage.submitHandler, email: ',
     //   email,
     //   ' password: ',
-    //   password
+    //   password118
     // );
 
     // default req will be login config
@@ -104,10 +108,12 @@ class AuthPage extends Component {
       To see response to this request, use dev-tools network tab and open response
       use preview tab to view the graphql data
     */
-
+    let gqlError = false;
     // using standard fetch
     fetch(process.env.REACT_APP_BACKEND_URL + '/graphql', {
       // I think everything has to be a POST to graphql server
+      // this post will either do a login or create user, depends
+      // on body contents
       method: 'POST',
       body: JSON.stringify(reqBody),
       headers: {
@@ -117,23 +123,31 @@ class AuthPage extends Component {
     })
       .then((res) => {
         console.log('res.status: ', res.status);
-        // add status === 500 check because graphql is acting unexpectedly on error
-        // Graphql is generating a 500 on error. This is non standard behavior
-        // Console will report 500 but will also console log graphql error
-        if (res.status !== 200 && res.status !== 201) {
+        console.log('res is: ', res);
+        // status is 500 if you attempt to login with a user that does not exist
+        // need to tell the front end, it is logged in the backend, need to put
+        // error message on the res from the backend, 500 is a graphql error
+        if (res.status !== 200 && res.status !== 201 && res.status !== 500) {
           throw new Error('Request to server failed!');
+        } else if (res.status === 500 /* && res.okay === false */) {
+          // mutation or query error condition
+          gqlError = true;
         }
         // else
         // this will return a promise so we can "then" it
         return res.json();
       })
       .then((resJson) => {
-        console.log(resJson);
-        if (
+        // console.log('In then resJson', resJson);
+        if (gqlError) {
+          this.setState({ feedback: resJson.errors[0].message });
+        } else if (
           this.state.isLogin &&
-          resJson.data.login.tokenString /* && this.isLogin */
+          // if we were in login mode and we got back a token
+          resJson.data.login.tokenString
         ) {
-          // set the App.state to logged in.
+          // login is put on the context in App.js
+          // this call sets App.js's state
           this.context.login(
             // this data is from the backend
             resJson.data.login.tokenString,
@@ -142,10 +156,25 @@ class AuthPage extends Component {
             resJson.data.login.tokenExpiration
           );
           // set up feedback to the u.i. logged in
+          console.log(
+            'User logged in, token is: ',
+            this.context.login.tokenString
+          );
           console.log('User logged in: ', resJson.data.login);
         } else {
-          // set up feedback to the u.i. created but still need to login
-          console.log('User created: ', resJson.data.createUser);
+          // we tried to create a user
+          // createUser will genererate a status of 200 on failure so check
+          // if createUser is null
+          if (resJson.data.createUser) {
+            console.log('User created: ', resJson.data.createUser);
+            this.setState({ feedback: 'User created. Please login.' });
+          } else {
+            console.log(`Failed to create user: ${resJson.errors[0].message}`);
+            // create user failed, get the error
+            this.setState({
+              feedback: `Failed to create user: ${resJson.errors[0].message}`,
+            });
+          }
         }
       })
       .catch((err) => {
@@ -156,29 +185,46 @@ class AuthPage extends Component {
   render() {
     // return some jsx
     return (
-      // onSubmit will pass an event arg to submitHandler
-      <form className="auth-form" onSubmit={this.submitHandler}>
-        <div className="form-control">
-          <label htmlFor="email">E-Mail</label>
-          {/* use ref to bind instance var */}
-          <input type="email" id="email" ref={this.emailEl}></input>
-        </div>
-        <div className="form-control">
-          <label htmlFor="password">Password</label>
-          {/* type="password" will hide the chars, use ref to bind */}
-          <input type="password" id="password" ref={this.passwordEl}></input>
-        </div>
-        <div className="form-actions">
-          {/* type="submit" should submit the parent form */}
-          <button type="submit">Submit</button>
-          {/* make button type="button" so it does not submit the form */}
-          <button type="button" onClick={this.switchModeHandler}>
-            Switch to {this.state.isLogin ? 'create user' : 'login'}
-          </button>
-        </div>
-      </form>
+      <div>
+        {/* onSubmit will pass an event arg to submitHandler */}
+        <form className="auth-form" onSubmit={this.submitHandler}>
+          <p>Backend is: {process.env.REACT_APP_BACKEND_URL}</p>
+          <h3>{this.state.isLogin ? 'Please Login:' : 'Create Account:'}</h3>
+          <div className="form-control">
+            <label htmlFor="email">E-Mail</label>
+            {/* use ref to bind instance var */}
+            <input type="email" id="email" ref={this.emailEl}></input>
+          </div>
+          <div className="form-control">
+            <label htmlFor="password">Password</label>
+            {/* type="password" will hide the chars, use ref to bind */}
+            <input type="password" id="password" ref={this.passwordEl}></input>
+          </div>
+          <div className="form-actions">
+            {/* type="submit" should submit the parent form */}
+            <button type="submit">Submit</button>
+            {/* make button type="button" so it does not submit the form */}
+            <button type="button" onClick={this.switchModeHandler}>
+              Switch to {this.state.isLogin ? 'create account' : 'login'}
+            </button>
+            {this.state.feedback && <p>{this.state.feedback}</p>}
+          </div>
+        </form>
+      </div>
     );
   }
 }
 
 export default AuthPage;
+// res
+// .json()
+// .then((resJson) => {
+//   console.log('In 500 condition, resJson is: ', resJson);
+//   this.setState({ error: resJson.errors[0].message });
+//   // jump out
+//   return;
+//   // throw new Error(resJson.errors[0].message);
+// })
+// .catch((error) => {
+//   throw error;
+// });

@@ -1,0 +1,44 @@
+/\* To HOST in Firebase Hosting \***\*\*\*\*\*\*\***\*\*\*\***\*\*\*\*\*\*\***/
+To statically host we will use Firebase Hosting
+Install firebase-tools like this:
+npm install -g firebase-tools
+
+login to firebase cli with your google account:
+firebase login
+
+
+Then in the project folder for your app use cli to run:
+firebase init
+
+Choose the hosting option with space and then confirm with enter.
+I created a new project with an ID of event-booking-frontend and a
+project name of event-booking-app. Says you can use the same name but seems you cannot.
+
+It then asks a bunch of config questions. I chose these options per Max:
+
+? What do you want to use as your public directory? build
+? Configure as a single-page app (rewrite all urls to /index.html)? Yes
+? Set up automatic builds and deploys with GitHub? No
+? File build/index.html already exists. Overwrite? No
+i Skipping write of build/index.html
+
+make sure you have a current build in your build dir and then run deploy:
+firebase deploy
+
+=== Deploying to 'event-booking-frontend'...
+
+i deploying hosting
+i hosting[event-booking-frontend]: beginning deploy...
+i hosting[event-booking-frontend]: found 31 files in build
+✔ hosting[event-booking-frontend]: file upload complete
+i hosting[event-booking-frontend]: finalizing version...
+✔ hosting[event-booking-frontend]: version finalized
+i hosting[event-booking-frontend]: releasing new version...
+✔ hosting[event-booking-frontend]: release complete
+
+✔ Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/event-booking-frontend/overview
+Hosting URL: https://event-booking-frontend.web.app
+
+We are now up on firebase hosting at this URL: https://event-booking-frontend.web.app

@@ -15,6 +15,7 @@ class BookingsPage extends Component {
   static contextType = AuthContext;
   // we we are added to the DOM
   componentDidMount() {
+    console.log('BookingsPage has mounted');
     this.fetchBookings();
   }
 
@@ -69,6 +70,7 @@ class BookingsPage extends Component {
   };
 
   cancelBookingHandler = (bookingId) => {
+    console.log('In cancelBookingHandler');
     this.setState({ isLoading: true });
     const reqBody = {
       /*
