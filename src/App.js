@@ -1,10 +1,12 @@
 // you are at video 17@19:45
 import './App.css';
+import React from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import AuthContext from './components/context/auth-context';
 import AuthPage from './pages/AuthPage';
 import BookingsPage from './pages/BookingsPage';
 import EventsPage from './pages/EventsPage';
+import CreateEventPage from './pages/CreateEventPage';
 import MainNavigation from './components/navigation/MainNavigation';
 import { Component } from 'react';
 
@@ -63,10 +65,13 @@ class App extends Component {
                 <Redirect from="bookings" to="/auth" exact />
               )}
               {!this.state.token && <Route path="/auth" component={AuthPage} />}
-              {this.state.token && <Redirect from="/auth" to="events" exact />}
+              {this.state.token && <Redirect from="/auth" to="/events" exact />}
               <Route path="/events" component={EventsPage} />
               {this.state.token && (
                 <Route path="/bookings" component={BookingsPage} />
+              )}
+              {this.state.token && (
+                <Route path="/create-event" component={CreateEventPage} />
               )}
               {!this.state.token && <Redirect to="/auth" exact />}
             </Switch>
@@ -78,3 +83,4 @@ class App extends Component {
 }
 
 export default App;
+//                   <Route path="/create-event" component={CreateEventPage} />

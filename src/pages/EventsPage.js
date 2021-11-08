@@ -256,53 +256,17 @@ class EventsPage extends Component {
       });
   };
   // React supplied
-  componentWillUnmount() {
-    // not sure what this is doing
-    this.isActive = false;
-  }
+  componentWillUnmount() {}
 
   render() {
     // return some jsx
     return (
       <React.Fragment>
-        {(this.state.creating || this.state.selectedEvent) && <Backdrop />}
-        {this.state.creating && (
-          <Modal
-            title="Add Event"
-            canCancel
-            canConfirm
-            onCancel={this.modalCancelHandler}
-            onConfirm={this.modalCreateEventHandler}
-            confirmText="Create Event"
-          >
-            <form>
-              <div className="form-control">
-                <label htmlFor="title">Title</label>
-                <input type="text" id="title" ref={this.titleElRef}></input>
-              </div>
-              <div className="form-control">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  id="description"
-                  rows="4"
-                  ref={this.descriptionElRef}
-                ></textarea>
-              </div>
-              <div className="form-control">
-                <label htmlFor="price">Price</label>
-                <input type="number" id="price" ref={this.priceElRef}></input>
-              </div>
-              <div className="form-control">
-                <label htmlFor="date">Date</label>
-                <input
-                  type="datetime-local"
-                  id="date"
-                  ref={this.dateElRef}
-                ></input>
-              </div>
-            </form>
-          </Modal>
-        )}
+        {/* if user has clicked create event or clicked details of a listed
+        event, put ui in Backdrop mode and present create or detail modal
+        on top layer above event list.
+      */}
+        {this.state.selectedEvent && <Backdrop />}
 
         {this.state.selectedEvent && (
           <Modal
@@ -311,23 +275,23 @@ class EventsPage extends Component {
             canConfirm
             onCancel={this.modalCancelHandler}
             onConfirm={this.bookEventHandler}
-            confirmText={this.context.token ? 'Book Event' : 'Confirm'}
+            confirmText={this.context.token ? 'Book Event' : 'Close'}
+            isLoggedIn={this.context.token}
           >
             <h2>
               ${this.state.selectedEvent.price} -{' '}
               {new Date(this.state.selectedEvent.date).toLocaleDateString()}
             </h2>
             <p>{this.state.selectedEvent.description}</p>
+            {!this.context.token && (
+              <div>
+                <hr />
+                <p>Login to book this event.</p>
+              </div>
+            )}
           </Modal>
         )}
-        {this.context.token && (
-          <div className="events-control">
-            <p>Share Your EventsPage</p>
-            <button className="btn" onClick={this.showCreateEventHandler}>
-              Create Event
-            </button>
-          </div>
-        )}
+        {/* Always show this */}
         {this.state.isLoading ? (
           <Spinner />
         ) : (

@@ -18,7 +18,7 @@ const EventItem = (props) => {
             className="btn"
             onClick={props.onDetail.bind(this, props.eventId)}
           >
-            View Details
+            View or Book
           </button>
         ) : (
           <p>You are the owner of this event.</p>

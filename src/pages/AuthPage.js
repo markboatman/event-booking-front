@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AuthContext from '../components/context/auth-context';
+import Spinner from '../components/spinner/Spinner';
 import './AuthPage.css';
 
 class AuthPage extends Component {
@@ -7,6 +8,7 @@ class AuthPage extends Component {
     // AuthPage is in login mode initially
     isLogin: true,
     feedback: '',
+    working: false,
   };
   /*
     from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
@@ -50,6 +52,7 @@ class AuthPage extends Component {
   submitHandler = (event) => {
     // Because this is an ARROW FUNCTION, 'this' will be bound correctly
     // preventDefault will prevent a req for the same page (url).
+
     event.preventDefault();
     const email = this.emailEl.current.value;
     const password = this.passwordEl.current.value;
@@ -110,6 +113,7 @@ class AuthPage extends Component {
     */
     let gqlError = false;
     // using standard fetch
+    this.setState({ working: true });
     fetch(process.env.REACT_APP_BACKEND_URL + '/graphql', {
       // I think everything has to be a POST to graphql server
       // this post will either do a login or create user, depends
@@ -161,25 +165,33 @@ class AuthPage extends Component {
             this.context.login.tokenString
           );
           console.log('User logged in: ', resJson.data.login);
+          this.setState({ working: false });
         } else {
           // we tried to create a user
           // createUser will genererate a status of 200 on failure so check
           // if createUser is null
           if (resJson.data.createUser) {
             console.log('User created: ', resJson.data.createUser);
-            this.setState({ feedback: 'User created. Please login.' });
+            this.setState({
+              feedback: 'User created. Please login.',
+              working: false,
+            });
+            // this.setState({ working: false });
           } else {
             console.log(`Failed to create user: ${resJson.errors[0].message}`);
             // create user failed, get the error
             this.setState({
               feedback: `Failed to create user: ${resJson.errors[0].message}`,
+              working: false,
             });
           }
+          // this.setState({ working: false });
         }
       })
       .catch((err) => {
         console.log(err.message);
       });
+    //this.setState({ working: false });
   };
 
   render() {
@@ -202,7 +214,9 @@ class AuthPage extends Component {
           </div>
           <div className="form-actions">
             {/* type="submit" should submit the parent form */}
-            <button type="submit">Submit</button>
+            <button type="submit">
+              {this.state.isLogin ? 'Login' : 'Create'}
+            </button>
             {/* make button type="button" so it does not submit the form */}
             <button type="button" onClick={this.switchModeHandler}>
               Switch to {this.state.isLogin ? 'create account' : 'login'}
@@ -210,6 +224,7 @@ class AuthPage extends Component {
             {this.state.feedback && <p>{this.state.feedback}</p>}
           </div>
         </form>
+        {this.state.working && <Spinner />}
       </div>
     );
   }

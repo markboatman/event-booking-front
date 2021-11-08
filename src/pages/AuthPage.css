@@ -2,5 +2,5 @@
   width: 25rem;
   max-width: 80%;
   /* auto moves it a little to the left */
-  margin: 5rem auto;
+  margin: 5rem auto 0px;
 }

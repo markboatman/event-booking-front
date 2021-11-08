@@ -17,21 +17,26 @@ const MainNavigation = (props) => (
         <header className="main-navigation">
           {/* react used className instead of class */}
           <div className="main-navigation__logo">
-            <h1>Events are Us</h1>
+            <h1>Organize and Attend Events</h1>
           </div>
           <nav className="main-navigation__items">
             <ul>
+              <li>
+                <NavLink to="/events">All Events</NavLink>
+              </li>
+
               {/* NavLink is a react component */}
               {!context.token && (
                 <li>
                   <NavLink to="/auth">Login</NavLink>
                 </li>
               )}
-              <li>
-                <NavLink to="/events">Events</NavLink>
-              </li>
+
               {context.token && (
                 <React.Fragment>
+                  <li>
+                    <NavLink to="/create-event">Create Event</NavLink>
+                  </li>
                   <li>
                     <NavLink to="/bookings">Bookings</NavLink>
                   </li>
