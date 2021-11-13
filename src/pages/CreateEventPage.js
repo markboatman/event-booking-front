@@ -8,6 +8,7 @@ import './EventsPage.css';
 
 class CreateEventPage extends Component {
   state = {
+    canCreate: true,
     created: false,
   };
   // This will create the class property "this.context"
@@ -103,7 +104,7 @@ class CreateEventPage extends Component {
       .then((resJson) => {
         console.log(resJson);
         console.log('Created event is: ', resJson.data.createEvent);
-        this.setState({ created: true });
+        this.setState({ canCreate: false, created: true });
       })
       .catch((err) => {
         console.log(err.message);
@@ -111,21 +112,22 @@ class CreateEventPage extends Component {
   };
 
   cancelHandler = () => {
-    this.setState({ created: false });
+    // probably don't need this
+    this.setState({ canCreate: false, created: false });
     // redirect to all events page
     this.props.history.push('/events');
   };
 
   // React supplied
   componentWillUnmount() {}
-
+  // ={this.state.created}
   render() {
     // return some jsx
     return (
       <Modal
         title="Create Event"
         canCancel
-        canConfirm
+        canCreate={this.state.canCreate}
         onCancel={this.cancelHandler}
         onConfirm={this.createEventHandler}
         confirmText="Create Event"

@@ -9,10 +9,18 @@ Notify user when no internet connection
  net::ERR_INTERNET_DISCONNECTED
 
  If on events page, clicking on events nav button should reload page
- New CreateEventPage. if they hit close or cancel it should route to events page
  All events and login page get scroll bar CreateEventPage does not have scroll bar.
  Maybe because it is "modal".
+
+ 
+ Can't close an event after you view it, can only book it.
+
+No message when no events to show.
+
+ Welcome whoever is logged in.
+ 
 
 
 
  
+

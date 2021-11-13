@@ -21,7 +21,15 @@ const EventItem = (props) => {
             View or Book
           </button>
         ) : (
-          <p>You are the owner of this event.</p>
+          <section>
+            <p>You are the owner of this event.</p>
+            <button
+              className="btn"
+              onClick={props.onDeleteEvent.bind(this, props.eventId)}
+            >
+              Delete Event
+            </button>
+          </section>
         )}
       </div>
     </li>

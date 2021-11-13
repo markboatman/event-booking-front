@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Modal.css';
 
 const Modal = (props) => {
+  // const [canCreate, setCanCreate = useState({canCreate: true});
+
   return (
     <div className="modal">
       <header className="modal__header">
@@ -20,7 +22,7 @@ const Modal = (props) => {
             </button>
           </section>
         )}
-        {props.canConfirm && (
+        {props.canCreate && (
           <button className="btn" onClick={props.onConfirm}>
             {props.confirmText}
           </button>

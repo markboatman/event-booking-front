@@ -8,7 +8,7 @@ import './EventsPage.css';
 
 class EventsPage extends Component {
   state = {
-    creating: false,
+    // creating: false,
     // populated by componentDidMount()
     events: [],
     isLoading: false,
@@ -89,12 +89,90 @@ class EventsPage extends Component {
       });
   };
 
-  showDetailHandler = (eventId) => {
+  onViewDetail = (eventId) => {
     this.setState((prevState) => {
       const selectedEvent = prevState.events.find((e) => e._id === eventId);
       return { selectedEvent: selectedEvent };
     });
   };
+
+  onDeleteEvent = (eventId) => {
+    console.log('EventPage onDeleteEvent eventId is: ', eventId);
+    this.setState({ isLoading: true });
+    // this.setState({ isLoading: true });
+    const reqBody = {
+      /*
+        Using gql recommended method for variable value injections.
+        Name the query or mutation after query/mutation keyword and
+        set reference the passed in parameter(s) with type.
+        Re-factor variable ref in query/mutation, i.e. no "${}" just
+        $var-name.
+        Add second field (variables:) to the reqBody that sets up/defines the 
+        parameter/var references for graphql.
+        */
+
+      query: `
+        mutation DeleteEvent($id: ID!) {
+        deleteEvent(eventId: $id) {
+          title
+          creator {
+            email
+          }
+        }
+      }
+      `,
+      variables: {
+        // eventId is being passed in to this handler
+        id: eventId,
+      },
+    };
+    let gqlError = false;
+    // using standard fetch
+    fetch(process.env.REACT_APP_BACKEND_URL + '/graphql', {
+      method: 'POST',
+      body: JSON.stringify(reqBody),
+      headers: {
+        // tell receiver what format we are sending
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.context.token,
+      },
+    })
+      .then((res) => {
+        // console.log('res.status: ', res.status);
+        if (res.status !== 200 && res.status !== 201 && res.status !== 500) {
+          this.setState({ isLoading: false });
+
+          throw new Error('Request to server failed!');
+        } else if (res.status === 500) {
+          gqlError = true;
+        }
+        // else
+        // this will return a promise so we can "then" it
+        return res.json();
+      })
+      .then((resJson) => {
+        // console.log(resJson.errors[0].message);
+        if (gqlError) {
+          console.log(
+            `EventsPage, onDeleteEvent error: ${resJson.errors[0].message}`
+          );
+          alert(resJson.errors[0].message);
+        } else {
+          console.log(`Event, "${resJson.data.deleteEvent.title}" deleted!`);
+          const newEvents = this.state.events.filter((event) => {
+            return eventId !== event._id;
+          });
+          this.setState({ events: newEvents });
+          alert(`Event, "${resJson.data.deleteEvent.title}" deleted!`);
+        }
+        console.log('Setting isLoading to false');
+        this.setState({ isLoading: false });
+      })
+      .catch((err) => {
+        console.log(err.message);
+        // this.setState({ isLoading: false });
+      });
+  }; // end onDeleteEvent
 
   bookEventHandler = (eventId) => {
     if (!this.context.token) {
@@ -189,7 +267,8 @@ class EventsPage extends Component {
           <EventList
             events={this.state.events}
             authUserId={this.context.userId}
-            onViewDetail={this.showDetailHandler}
+            onViewDetail={this.onViewDetail}
+            onDeleteEvent={this.onDeleteEvent}
           />
         )}
       </React.Fragment>

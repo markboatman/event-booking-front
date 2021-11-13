@@ -144,7 +144,10 @@ class AuthPage extends Component {
       .then((resJson) => {
         // console.log('In then resJson', resJson);
         if (gqlError) {
-          this.setState({ feedback: resJson.errors[0].message });
+          this.setState({
+            feedback: resJson.errors[0].message,
+            working: false,
+          });
         } else if (
           this.state.isLogin &&
           // if we were in login mode and we got back a token
