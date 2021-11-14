@@ -1,9 +1,5 @@
-move the login button to the right like logout
-allow user to delete event they own if number attending is zero
+
 show user number of people attending their event
-put logged user name in nav bar
-TODO in EventsPage and Modal.js working on Event info modal
-Need spinner after login, waiting for events page to go to events page
 
 Notify user when no internet connection
  net::ERR_INTERNET_DISCONNECTED
@@ -13,14 +9,9 @@ Notify user when no internet connection
  Maybe because it is "modal".
 
  
- Can't close an event after you view it, can only book it.
+maybe: Go to bookings after you book an event
 
-No message when no events to show.
-
- Welcome whoever is logged in.
- 
-
-
+Reloading any page logs out the user
 
  
 

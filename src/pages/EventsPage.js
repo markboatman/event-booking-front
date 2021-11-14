@@ -92,6 +92,7 @@ class EventsPage extends Component {
   onViewDetail = (eventId) => {
     this.setState((prevState) => {
       const selectedEvent = prevState.events.find((e) => e._id === eventId);
+
       return { selectedEvent: selectedEvent };
     });
   };
@@ -174,12 +175,17 @@ class EventsPage extends Component {
       });
   }; // end onDeleteEvent
 
+  cancelHandler = () => {
+    // this functions like the beginning if(not logged in) in bookEventHandler
+    this.setState({ selectedEvent: null });
+  };
+
   bookEventHandler = (eventId) => {
     if (!this.context.token) {
       this.setState({ selectedEvent: null });
       return;
     }
-
+    // else book the event
     const reqBody = {
       query: `
         mutation BookEvent($Id: ID!) {
@@ -241,8 +247,8 @@ class EventsPage extends Component {
           <Modal
             title={this.state.selectedEvent.title}
             canCancel
-            canConfirm
-            onCancel={this.modalCancelHandler}
+            canCreate
+            onCancel={this.cancelHandler}
             onConfirm={this.bookEventHandler}
             confirmText={this.context.token ? 'Book Event' : 'Close'}
             isLoggedIn={this.context.token}
@@ -270,6 +276,9 @@ class EventsPage extends Component {
             onViewDetail={this.onViewDetail}
             onDeleteEvent={this.onDeleteEvent}
           />
+        )}
+        {!this.state.isLoading && this.state.events.length < 1 && (
+          <h2 className="events-control">No Events Created</h2>
         )}
       </React.Fragment>
     );

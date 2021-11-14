@@ -7,8 +7,11 @@ export default React.createContext({
   // in App.js
   token: null,
   userId: null,
-  // don't know how this works, I set/call it in AuthPage
-  login: (tokenString, userId, tokenExpiration) => {},
+  tokenExpiration: null,
+  email: null,
+  // this is a dummy placeholder for code completion
+  // login is defined in App.js
+  login: (tokenString, userId, tokenExpiration, email) => {},
   logout: () => {},
 });
 

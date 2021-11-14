@@ -5,8 +5,8 @@ import './AuthPage.css';
 
 class AuthPage extends Component {
   state = {
-    // AuthPage is in login mode initially
-    isLogin: true,
+    // page is in loginMode or createUser mode
+    loginMode: true,
     feedback: '',
     working: false,
   };
@@ -43,7 +43,7 @@ class AuthPage extends Component {
 
   switchModeHandler = () => {
     this.setState((prevState) => {
-      return { isLogin: !prevState.isLogin, feedback: '' };
+      return { loginMode: !prevState.loginMode, feedback: '' };
     });
   };
 
@@ -75,6 +75,7 @@ class AuthPage extends Component {
             userId
             tokenString
             tokenExpiration
+            email
           }
         }
       `,
@@ -84,7 +85,7 @@ class AuthPage extends Component {
       },
     };
 
-    if (!this.state.isLogin) {
+    if (!this.state.loginMode) {
       // set up create user
       reqBody = {
         query: `
@@ -149,10 +150,11 @@ class AuthPage extends Component {
             working: false,
           });
         } else if (
-          this.state.isLogin &&
+          this.state.loginMode &&
           // if we were in login mode and we got back a token
           resJson.data.login.tokenString
         ) {
+          console.log('AuthPage login returned: ', resJson.data.login);
           // login is put on the context in App.js
           // this call sets App.js's state
           this.context.login(
@@ -160,13 +162,14 @@ class AuthPage extends Component {
             resJson.data.login.tokenString,
             resJson.data.login.userId,
             // this is from the Auth middleware
-            resJson.data.login.tokenExpiration
+            resJson.data.login.tokenExpiration,
+            resJson.data.login.email
           );
           // set up feedback to the u.i. logged in
-          console.log(
-            'User logged in, token is: ',
-            this.context.login.tokenString
-          );
+          // console.log(
+          //   'User logged in, token is: ',
+          //   this.context.login.tokenString
+          // );
           console.log('User logged in: ', resJson.data.login);
           this.setState({ working: false });
         } else {
@@ -204,7 +207,7 @@ class AuthPage extends Component {
         {/* onSubmit will pass an event arg to submitHandler */}
         <form className="auth-form" onSubmit={this.submitHandler}>
           <p>Backend is: {process.env.REACT_APP_BACKEND_URL}</p>
-          <h3>{this.state.isLogin ? 'Please Login:' : 'Create Account:'}</h3>
+          <h3>{this.state.loginMode ? 'Please Login:' : 'Create Account:'}</h3>
           <div className="form-control">
             <label htmlFor="email">E-Mail</label>
             {/* use ref to bind instance var */}
@@ -218,11 +221,11 @@ class AuthPage extends Component {
           <div className="form-actions">
             {/* type="submit" should submit the parent form */}
             <button type="submit">
-              {this.state.isLogin ? 'Login' : 'Create'}
+              {this.state.loginMode ? 'Login' : 'Create'}
             </button>
             {/* make button type="button" so it does not submit the form */}
             <button type="button" onClick={this.switchModeHandler}>
-              Switch to {this.state.isLogin ? 'create account' : 'login'}
+              Switch to {this.state.loginMode ? 'create account' : 'login'}
             </button>
             {this.state.feedback && <p>{this.state.feedback}</p>}
           </div>

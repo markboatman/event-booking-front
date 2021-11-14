@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Modal.css';
 
 const Modal = (props) => {
@@ -15,6 +15,9 @@ const Modal = (props) => {
         {props.children}
       </section>
       <section className="modal__actions">
+        {/* if user logged in have both this close button and create/confirm button
+        I don't like this setup
+       */}
         {props.canCancel && props.isLoggedIn && (
           <section>
             <button className="btn" onClick={props.onCancel}>
@@ -22,6 +25,7 @@ const Modal = (props) => {
             </button>
           </section>
         )}
+        {/* If user not logged in this is a close button */}
         {props.canCreate && (
           <button className="btn" onClick={props.onConfirm}>
             {props.confirmText}

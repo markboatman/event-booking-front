@@ -22,7 +22,7 @@ const EventItem = (props) => {
           </button>
         ) : (
           <section>
-            <p>You are the owner of this event.</p>
+            <p>You own this event.</p>
             <button
               className="btn"
               onClick={props.onDeleteEvent.bind(this, props.eventId)}

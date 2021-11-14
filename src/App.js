@@ -12,21 +12,31 @@ import { Component } from 'react';
 
 class App extends Component {
   state = {
+    // TODO add username
     token: null,
     userId: null,
     tokenExpiration: null,
+    email: null,
   };
 
-  login = (token, userId, tokenExpiration) => {
+  // TODO add username
+  login = (token, userId, tokenExpiration, email) => {
     this.setState({
       token: token,
       userId: userId,
       tokenExpiration: tokenExpiration,
+      email: email,
     });
+    console.log('In App.js login, email is: ', this.state.email);
   };
 
   logout = () => {
-    this.setState({ token: null, userId: null, tokenExpiration: null });
+    this.setState({
+      token: null,
+      userId: null,
+      tokenExpiration: null,
+      email: null,
+    });
   };
 
   render() {
@@ -45,6 +55,7 @@ class App extends Component {
             token: this.state.token,
             // don't think this line gets us anything
             userId: this.state.userId,
+            email: this.state.email,
             login: this.login,
             logout: this.logout,
           }}
