@@ -12,6 +12,21 @@ Notify user when no internet connection
 maybe: Go to bookings after you book an event
 
 Reloading any page logs out the user
+In order to persist user session, looking at react-firebase-auth in Firebase.js onAuthStateChanged
+and makeAuthProvider.js has the call to local browser storage 
+localStorage.setItem('authUser', JSON.stringify(authUser));
+maybe user sessionStorage.setItem()
+// https://www.w3schools.com/jsref/prop_win_sessionstorage.asp
+
+
+graphql-how-to Hacker News has Authentication with prisma database. Can only acceess
+the apollo server from the qraphql playground interface
+
+
+
+
+
+Allow User to delete all data in database
 
  
 

@@ -135,7 +135,7 @@ class EventsPage extends Component {
       headers: {
         // tell receiver what format we are sending
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.context.token,
+        Authorization: 'Bearer ' + this.context.authUser.token,
       },
     })
       .then((res) => {
@@ -181,7 +181,7 @@ class EventsPage extends Component {
   };
 
   bookEventHandler = (eventId) => {
-    if (!this.context.token) {
+    if (!this.context.authUser.token) {
       this.setState({ selectedEvent: null });
       return;
     }
@@ -208,7 +208,7 @@ class EventsPage extends Component {
       headers: {
         // tell receiver what format we are sending
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.context.token,
+        Authorization: 'Bearer ' + this.context.authUser.token,
       },
     })
       .then((res) => {
@@ -250,15 +250,15 @@ class EventsPage extends Component {
             canCreate
             onCancel={this.cancelHandler}
             onConfirm={this.bookEventHandler}
-            confirmText={this.context.token ? 'Book Event' : 'Close'}
-            isLoggedIn={this.context.token}
+            confirmText={this.context.authUser.token ? 'Book Event' : 'Close'}
+            isLoggedIn={this.context.authUser.token}
           >
             <h2>
               ${this.state.selectedEvent.price} -{' '}
               {new Date(this.state.selectedEvent.date).toLocaleDateString()}
             </h2>
             <p>{this.state.selectedEvent.description}</p>
-            {!this.context.token && (
+            {!this.context.authUser.token && (
               <div>
                 <hr />
                 <p>Login to book this event.</p>
@@ -272,7 +272,9 @@ class EventsPage extends Component {
         ) : (
           <EventList
             events={this.state.events}
-            authUserId={this.context.userId}
+            authUserId={
+              this.context.authUser ? this.context.authUser.userId : null
+            }
             onViewDetail={this.onViewDetail}
             onDeleteEvent={this.onDeleteEvent}
           />

@@ -12,31 +12,30 @@ import { Component } from 'react';
 
 class App extends Component {
   state = {
-    // TODO add username
-    token: null,
-    userId: null,
-    tokenExpiration: null,
-    email: null,
+    authUser: JSON.parse(localStorage.getItem('authUser')),
   };
 
   // TODO add username
   login = (token, userId, tokenExpiration, email) => {
-    this.setState({
+    const authUser = {
       token: token,
       userId: userId,
       tokenExpiration: tokenExpiration,
       email: email,
+    };
+    console.log('authUser in App.login is: ', authUser);
+    this.setState({
+      authUser: authUser,
     });
-    console.log('In App.js login, email is: ', this.state.email);
+    // TODO store the state to browser
+    console.log('In App.js login, email is: ', this.state.authUser.email);
   };
 
   logout = () => {
     this.setState({
-      token: null,
-      userId: null,
-      tokenExpiration: null,
-      email: null,
+      authUser: null,
     });
+    // TODO store the state to browser
   };
 
   render() {
@@ -51,11 +50,7 @@ class App extends Component {
         */}
         <AuthContext.Provider
           value={{
-            // don't think this line gets us anything
-            token: this.state.token,
-            // don't think this line gets us anything
-            userId: this.state.userId,
-            email: this.state.email,
+            authUser: this.state.authUser,
             login: this.login,
             logout: this.logout,
           }}
@@ -71,20 +66,24 @@ class App extends Component {
           */}
             <Switch>
               {/* need to use exact on "/ nothing"*/}
-              {this.state.token && <Redirect from="/" to="/events" exact />}
-              {!this.state.token && (
+              {this.state.authUser && <Redirect from="/" to="/events" exact />}
+              {!this.state.authUser && (
                 <Redirect from="bookings" to="/auth" exact />
               )}
-              {!this.state.token && <Route path="/auth" component={AuthPage} />}
-              {this.state.token && <Redirect from="/auth" to="/events" exact />}
+              {!this.state.authUser && (
+                <Route path="/auth" component={AuthPage} />
+              )}
+              {this.state.authUser && (
+                <Redirect from="/auth" to="/events" exact />
+              )}
               <Route path="/events" component={EventsPage} />
-              {this.state.token && (
+              {this.state.authUser && (
                 <Route path="/bookings" component={BookingsPage} />
               )}
-              {this.state.token && (
+              {this.state.authUser && (
                 <Route path="/create-event" component={CreateEventPage} />
               )}
-              {!this.state.token && <Redirect to="/auth" exact />}
+              {!this.state.authUser && <Redirect to="/auth" exact />}
             </Switch>
           </main>
         </AuthContext.Provider>

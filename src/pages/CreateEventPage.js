@@ -86,7 +86,7 @@ class CreateEventPage extends Component {
       headers: {
         // tell receiver what format we are sending
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.context.token}`,
+        Authorization: `Bearer ${this.context.authUser.token}`,
       },
     })
       .then((res) => {
@@ -131,7 +131,7 @@ class CreateEventPage extends Component {
         onCancel={this.cancelHandler}
         onConfirm={this.createEventHandler}
         confirmText="Create Event"
-        isLoggedIn={this.context.token}
+        isLoggedIn={this.context.authUser.token}
       >
         <form>
           <div className="form-control">

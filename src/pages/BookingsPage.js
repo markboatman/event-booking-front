@@ -45,7 +45,7 @@ class BookingsPage extends Component {
       headers: {
         // tell receiver what format we are sending
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.context.token,
+        Authorization: 'Bearer ' + this.context.authUser.token,
       },
     })
       .then((res) => {
@@ -109,7 +109,7 @@ class BookingsPage extends Component {
       headers: {
         // tell receiver what format we are sending
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.context.token,
+        Authorization: 'Bearer ' + this.context.authUser.token,
       },
     })
       .then((res) => {

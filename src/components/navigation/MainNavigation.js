@@ -26,13 +26,13 @@ const MainNavigation = (props) => (
               </li>
 
               {/* NavLink is a react component */}
-              {!context.token && (
+              {!context.authUser && (
                 <li>
                   <NavLink to="/auth">Login</NavLink>
                 </li>
               )}
 
-              {context.token && (
+              {context.authUser && (
                 <React.Fragment>
                   <li>
                     <NavLink to="/create-event">Create Event</NavLink>
@@ -44,7 +44,9 @@ const MainNavigation = (props) => (
                     <button onClick={context.logout}>Logout</button>
                   </li>
                   <li>
-                    <strong>User: {context.email.split('@')[0]}</strong>
+                    <strong>
+                      User: {context.authUser.email.split('@')[0]}
+                    </strong>
                   </li>
                 </React.Fragment>
               )}
