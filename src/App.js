@@ -17,6 +17,7 @@ class App extends Component {
 
   // TODO add username
   login = (token, userId, tokenExpiration, email) => {
+    // passing params like this so I can see the structure of authUser
     const authUser = {
       token: token,
       userId: userId,
@@ -37,6 +38,13 @@ class App extends Component {
     });
     // TODO store the state to browser
   };
+
+  componentWillUnmount() {
+    this.setState({
+      authUser: null,
+    });
+    // TODO store the state to browser
+  }
 
   render() {
     return (

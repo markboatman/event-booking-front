@@ -22,10 +22,6 @@ maybe user sessionStorage.setItem()
 graphql-how-to Hacker News has Authentication with prisma database. Can only acceess
 the apollo server from the qraphql playground interface
 
-
-
-
-
 Allow User to delete all data in database
 
  

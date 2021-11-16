@@ -181,7 +181,7 @@ class EventsPage extends Component {
   };
 
   bookEventHandler = (eventId) => {
-    if (!this.context.authUser.token) {
+    if (!this.context.authUser) {
       this.setState({ selectedEvent: null });
       return;
     }
@@ -250,15 +250,15 @@ class EventsPage extends Component {
             canCreate
             onCancel={this.cancelHandler}
             onConfirm={this.bookEventHandler}
-            confirmText={this.context.authUser.token ? 'Book Event' : 'Close'}
-            isLoggedIn={this.context.authUser.token}
+            confirmText={this.context.authUser ? 'Book Event' : 'Close'}
+            isLoggedIn={this.context.authUser}
           >
             <h2>
               ${this.state.selectedEvent.price} -{' '}
               {new Date(this.state.selectedEvent.date).toLocaleDateString()}
             </h2>
             <p>{this.state.selectedEvent.description}</p>
-            {!this.context.authUser.token && (
+            {!this.context.authUser && (
               <div>
                 <hr />
                 <p>Login to book this event.</p>
