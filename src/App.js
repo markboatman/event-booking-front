@@ -12,7 +12,7 @@ import { Component } from 'react';
 
 class App extends Component {
   state = {
-    authUser: JSON.parse(localStorage.getItem('authUser')),
+    authUser: JSON.parse(sessionStorage.getItem('eventUser')),
   };
 
   // TODO add username
@@ -24,10 +24,15 @@ class App extends Component {
       tokenExpiration: tokenExpiration,
       email: email,
     };
+    // console.log(
+    //   'return of JSON.parse(sessionStorage.getItem(eventUser)) is: ',
+    //   JSON.parse(sessionStorage.getItem('eventUser'))
+    // );
     console.log('authUser in App.login is: ', authUser);
     this.setState({
       authUser: authUser,
     });
+    sessionStorage.setItem('eventUser', JSON.stringify(authUser));
     // TODO store the state to browser
     console.log('In App.js login, email is: ', this.state.authUser.email);
   };
@@ -36,14 +41,16 @@ class App extends Component {
     this.setState({
       authUser: null,
     });
-    // TODO store the state to browser
+    sessionStorage.removeItem('eventUser');
   };
 
   componentWillUnmount() {
     this.setState({
       authUser: null,
     });
-    // TODO store the state to browser
+    // if you go to another site in the same tab
+    // you will get logged out
+    sessionStorage.removeItem('eventUser');
   }
 
   render() {

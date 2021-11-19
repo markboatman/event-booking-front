@@ -178,7 +178,7 @@ class EventsPage extends Component {
 
   cancelHandler = () => {
     // this functions like the beginning if(not logged in) in bookEventHandler
-    this.setState({ selectedEvent: null, deleteAllData: false });
+    this.setState({ selectedEvent: null, deleteAllDbData: false });
   };
 
   bookEventHandler = (eventId) => {
@@ -241,15 +241,7 @@ class EventsPage extends Component {
     this.setState({ isLoading: true });
     // this.setState({ isLoading: true });
     const reqBody = {
-      /*
-        Using gql recommended method for variable value injections.
-        Name the query or mutation after query/mutation keyword and
-        set reference the passed in parameter(s) with type.
-        Re-factor variable ref in query/mutation, i.e. no "${}" just
-        $var-name.
-        Add second field (variables:) to the reqBody that sets up/defines the 
-        parameter/var references for graphql.
-        */
+  
 
       query: `
         mutation {
@@ -283,7 +275,6 @@ class EventsPage extends Component {
         }
         // else
         // this will return a promise so we can "then" it
-        this.setState({ deleteAllData: false });
         return res.json();
       })
       .then((resJson) => {
@@ -294,8 +285,6 @@ class EventsPage extends Component {
           );
           alert(resJson.errors[0].message);
         } else {
-          // should have been successful delete so
-          this.setState({ events: [] });
           console.log(
             `Event.onDeleteAllData, userDelCount is: , "${resJson.data.deleteAllDbData.userDelCount}"`
           );

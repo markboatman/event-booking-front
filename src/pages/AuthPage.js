@@ -84,7 +84,7 @@ class AuthPage extends Component {
         password: password,
       },
     };
-
+    // if in create user mode
     if (!this.state.loginMode) {
       // set up create user
       reqBody = {
@@ -211,12 +211,22 @@ class AuthPage extends Component {
           <div className="form-control">
             <label htmlFor="email">E-Mail</label>
             {/* use ref to bind instance var */}
-            <input type="email" id="email" ref={this.emailEl}></input>
+            <input
+              type="email"
+              id="email"
+              ref={this.emailEl}
+              placeholder={!this.state.loginMode && 'any@email.com'}
+            ></input>
           </div>
           <div className="form-control">
             <label htmlFor="password">Password</label>
             {/* type="password" will hide the chars, use ref to bind */}
-            <input type="password" id="password" ref={this.passwordEl}></input>
+            <input
+              type="password"
+              id="password"
+              ref={this.passwordEl}
+              placeholder={!this.state.loginMode && 'any-password'}
+            ></input>
           </div>
           <div className="form-actions">
             {/* type="submit" should submit the parent form */}

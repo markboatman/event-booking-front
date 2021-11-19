@@ -18,7 +18,7 @@ const EventItem = (props) => {
             className="btn"
             onClick={props.onDetail.bind(this, props.eventId)}
           >
-            View or Book
+            View and Book
           </button>
         ) : (
           <section>
