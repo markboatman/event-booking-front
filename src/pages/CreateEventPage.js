@@ -10,6 +10,8 @@ class CreateEventPage extends Component {
   state = {
     canCreate: true,
     created: false,
+    working: false,
+    inputError: false,
   };
   // This will create the class property "this.context"
   // Do not have to create this.context directly. Below
@@ -41,11 +43,13 @@ class CreateEventPage extends Component {
       price <= 0 ||
       date.trim().length === 0
     ) {
-      // don't do anything
-      // maybe put some error reporting here
+      this.setState({ inputError: true });
+      // JUMP OUT
       return;
+    } else {
+      this.setState({ inputError: false });
     }
-    // else
+    // else continue
     // construct an event object with input data, ES6 syntax
     const event = { title, description, price, date };
     console.log(event);
@@ -80,6 +84,7 @@ class CreateEventPage extends Component {
     };
 
     // using standard fetch
+    this.setState({ working: true });
     fetch(process.env.REACT_APP_BACKEND_URL + '/graphql', {
       method: 'POST',
       body: JSON.stringify(reqBody),
@@ -102,12 +107,14 @@ class CreateEventPage extends Component {
         return res.json();
       })
       .then((resJson) => {
+        // SUCCESS
         console.log(resJson);
         console.log('Created event is: ', resJson.data.createEvent);
-        this.setState({ canCreate: false, created: true });
+        this.setState({ canCreate: false, created: true, working: false });
       })
       .catch((err) => {
         console.log(err.message);
+        this.setState({ working: false });
       });
   };
 
@@ -133,6 +140,7 @@ class CreateEventPage extends Component {
         confirmText="Create Event"
         isLoggedIn={this.context.authUser.token}
       >
+        {this.state.working && <Spinner />}
         <form>
           <div className="form-control">
             <label htmlFor="title">Title</label>
@@ -154,6 +162,12 @@ class CreateEventPage extends Component {
             <label htmlFor="date">Date</label>
             <input type="datetime-local" id="date" ref={this.dateElRef}></input>
           </div>
+          {this.state.inputError && (
+            <section>
+              <hr />
+              <p>Invalid input, please check your input values.</p>
+            </section>
+          )}
           {this.state.created && (
             <section>
               <hr />

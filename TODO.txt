@@ -25,5 +25,11 @@ the apollo server from the qraphql playground interface
 Allow users to upload a file to populate the database
 
 Update the event cost chart to give a number range.
+
+learn to diff working file with last commited file
+
+Give message if use has no bookings.
+
+Bring user back to events list after clearing the database
  
 

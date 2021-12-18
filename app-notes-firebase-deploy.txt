@@ -1,3 +1,13 @@
+need to run a build of your react app first, so do:
+npm run build
+
+This will create a build dir and populate it with a build that can be deployed. If you want to run in l
+locally you have to install a static server. Can do this:
+npm install -g serve
+
+Then do this to run it. It will tell you what port it is running on:
+serve -s build
+
 /\* To HOST in Firebase Hosting \***\*\*\*\*\*\*\***\*\*\*\***\*\*\*\*\*\*\***/
 To statically host we will use Firebase Hosting
 Install firebase-tools like this:
@@ -7,10 +17,13 @@ login to firebase cli with your google account:
 firebase login
 
 
+currently need to do this to get firebase init to work: 
+unset NODE_OPTIONS
+
 Then in the project folder for your app use cli to run:
 firebase init
 
-Choose the hosting option with space and then confirm with enter.
+Choose this: ◯ Hosting: Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys
 I created a new project with an ID of event-booking-frontend and a
 project name of event-booking-app. Says you can use the same name but seems you cannot.
 

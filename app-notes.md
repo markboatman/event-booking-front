@@ -1,3 +1,6 @@
+This is a react app.
+The production build is running at: https://event-booking-frontend.web.app
+
 Create a root directory for the project.
 Go in the project dir and create a node_modules folder in the root dir and tell dropbox not to sync:
 
@@ -52,3 +55,5 @@ yarn global add serve
 
 Then exec from project folder that contains ./build:
 serve -s build
+
+

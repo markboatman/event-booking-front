@@ -69,6 +69,7 @@ class AuthPage extends Component {
 
     // default req will be login config
     let reqBody = {
+      // NOTE wrapper Login mutation signature for injecting local var values
       query: `
         mutation Login( $email: String!, $password: String! ) {
           login(email: $email, password: $password) {
@@ -80,6 +81,7 @@ class AuthPage extends Component {
         }
       `,
       variables: {
+        // this is a graphql method for injecting local values into the above query
         email: email,
         password: password,
       },

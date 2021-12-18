@@ -8,8 +8,7 @@ import './EventsPage.css';
 
 class EventsPage extends Component {
   state = {
-    // creating: false,
-    // populated by componentDidMount()
+    // events[] populated by componentDidMount()
     events: [],
     isLoading: false,
     selectedEvent: null,
@@ -160,6 +159,7 @@ class EventsPage extends Component {
           );
           alert(resJson.errors[0].message);
         } else {
+          // SUCCESS
           console.log(`Event, "${resJson.data.deleteEvent.title}" deleted!`);
           const newEvents = this.state.events.filter((event) => {
             return eventId !== event._id;
@@ -177,7 +177,7 @@ class EventsPage extends Component {
   }; // end onDeleteEvent
 
   cancelHandler = () => {
-    // this functions like the beginning if(not logged in) in bookEventHandler
+    // these flags tell the modals to show/hide themselves in the JSX
     this.setState({ selectedEvent: null, deleteAllData: false });
   };
 
@@ -241,16 +241,6 @@ class EventsPage extends Component {
     this.setState({ isLoading: true });
     // this.setState({ isLoading: true });
     const reqBody = {
-      /*
-        Using gql recommended method for variable value injections.
-        Name the query or mutation after query/mutation keyword and
-        set reference the passed in parameter(s) with type.
-        Re-factor variable ref in query/mutation, i.e. no "${}" just
-        $var-name.
-        Add second field (variables:) to the reqBody that sets up/defines the 
-        parameter/var references for graphql.
-        */
-
       query: `
         mutation {
           deleteAllDbData {
@@ -283,7 +273,6 @@ class EventsPage extends Component {
         }
         // else
         // this will return a promise so we can "then" it
-        this.setState({ deleteAllData: false });
         return res.json();
       })
       .then((resJson) => {
@@ -294,14 +283,16 @@ class EventsPage extends Component {
           );
           alert(resJson.errors[0].message);
         } else {
-          // should have been successful delete so
-          this.setState({ events: [] });
+          // SUCCESS
           console.log(
             `Event.onDeleteAllData, userDelCount is: , "${resJson.data.deleteAllDbData.userDelCount}"`
           );
           // user is no longer in the db so log them out
           this.context.logout();
           // alert(`Event, "${resJson.data.deleteEvent.title}" deleted!`);
+
+          // close the modal and remove the backdrop by setting deleteAllData
+          this.setState({ deleteAllData: false });
         }
         //console.log('Setting isLoading to false');
         this.setState({ isLoading: false });
@@ -323,7 +314,7 @@ class EventsPage extends Component {
         event, put ui in Backdrop mode and present create or detail modal
         on top layer above event list.
       */}
-        {this.state.selectedEvent && <Backdrop />}
+        {(this.state.selectedEvent || this.state.deleteAllData) && <Backdrop />}
 
         {this.state.selectedEvent && (
           <Modal
