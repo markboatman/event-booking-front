@@ -80,8 +80,8 @@ class App extends Component {
             Don't go through the sequence
           */}
             <Switch>
-              {/* need to use exact on "/ nothing"*/}
-              {this.state.authUser && <Redirect from="/" to="/events" exact />}
+              {/* need to use exact on "/" */}
+              {!this.state.authUser && <Redirect from="/" to="/events" exact />}
               {!this.state.authUser && (
                 <Redirect from="bookings" to="/auth" exact />
               )}

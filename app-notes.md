@@ -1,6 +1,7 @@
 This is a react app.
-The production build is running at: https://event-booking-frontend.web.app
+The production build is running on firebase hosting at: https://event-booking-frontend.web.app
 
+Steps to produce:
 Create a root directory for the project.
 Go in the project dir and create a node_modules folder in the root dir and tell dropbox not to sync:
 

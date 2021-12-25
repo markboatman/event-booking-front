@@ -355,7 +355,9 @@ class EventsPage extends Component {
         )}
         {/* Always show this */}
         {this.state.isLoading ? (
-          <Spinner />
+          <div>
+            <Spinner message="Loading Events" />
+          </div>
         ) : (
           <React.Fragment>
             {this.context.authUser && (
