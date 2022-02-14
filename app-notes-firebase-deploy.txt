@@ -13,12 +13,12 @@ To statically host we will use Firebase Hosting
 Install firebase-tools like this:
 npm install -g firebase-tools
 
+currently need to unset NODE_OPTIONS so firebase cli will run  properly:
+unset NODE_OPTIONS
+
 login to firebase cli with your google account:
 firebase login
 
-
-currently need to do this to get firebase init to work: 
-unset NODE_OPTIONS
 
 Then in the project folder for your app use cli to run:
 firebase init

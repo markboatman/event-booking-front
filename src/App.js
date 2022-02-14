@@ -1,7 +1,7 @@
 // you are at video 17@19:45
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Routes } from 'react-router-dom';
 import AuthContext from './components/context/auth-context';
 import AuthPage from './pages/AuthPage';
 import BookingsPage from './pages/BookingsPage';
@@ -79,10 +79,11 @@ class App extends Component {
             {/* use Switch to jump directly to url match
             Don't go through the sequence
           */}
-            <Switch>
+            <Routes>
               {/* need to use exact on "/" */}
               {!this.state.authUser && <Redirect from="/" to="/events" exact />}
               {!this.state.authUser && (
+                // this should be from="/bookings"
                 <Redirect from="bookings" to="/auth" exact />
               )}
               {!this.state.authUser && (
@@ -99,7 +100,7 @@ class App extends Component {
                 <Route path="/create-event" component={CreateEventPage} />
               )}
               {!this.state.authUser && <Redirect to="/auth" exact />}
-            </Switch>
+            </Routes>
           </main>
         </AuthContext.Provider>
       </BrowserRouter>
