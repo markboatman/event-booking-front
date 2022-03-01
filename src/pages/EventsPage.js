@@ -165,7 +165,7 @@ class EventsPage extends Component {
             return eventId !== event._id;
           });
           this.setState({ events: newEvents });
-          alert(`Event, "${resJson.data.deleteEvent.title}" deleted!`);
+          // alert(`Event, "${resJson.data.deleteEvent.title}" deleted!`);
         }
         console.log('Setting isLoading to false');
         this.setState({ isLoading: false });

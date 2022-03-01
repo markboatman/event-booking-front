@@ -1,14 +1,16 @@
 // you are at video 17@19:45
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Route, Redirect, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+import { Component } from 'react';
 import AuthContext from './components/context/auth-context';
+import ProtectedRouteParent from './components/ProtectedRouteParent';
 import AuthPage from './pages/AuthPage';
 import BookingsPage from './pages/BookingsPage';
 import EventsPage from './pages/EventsPage';
+import NoMatch from './pages/NoMatch';
 import CreateEventPage from './pages/CreateEventPage';
 import MainNavigation from './components/navigation/MainNavigation';
-import { Component } from 'react';
 
 class App extends Component {
   state = {
@@ -55,58 +57,46 @@ class App extends Component {
 
   render() {
     return (
-      /* this is one way to make a one page react app */
-      <BrowserRouter>
-        {/* user <React.Fragment /> here in tutorial */}
-        {/* 
-          You have to intialize the react global context by setting value={ ... }
-          Context is defined and available to all decendants of the wrapper
-          element AuthContext.
-        */}
-        <AuthContext.Provider
-          value={{
-            authUser: this.state.authUser,
-            login: this.login,
-            logout: this.logout,
-          }}
-        >
-          {/* this is the menu bar */}
-          <MainNavigation />
-          <main className="main-content">
-            {' '}
-            {/* <main> is optional */}
-            {/* This is the main-content section */}
-            {/* use Switch to jump directly to url match
-            Don't go through the sequence
-          */}
-            <Routes>
-              {/* need to use exact on "/" */}
-              {!this.state.authUser && <Redirect from="/" to="/events" exact />}
-              {!this.state.authUser && (
-                // this should be from="/bookings"
-                <Redirect from="bookings" to="/auth" exact />
-              )}
-              {!this.state.authUser && (
-                <Route path="/auth" component={AuthPage} />
-              )}
-              {this.state.authUser && (
-                <Redirect from="/auth" to="/events" exact />
-              )}
-              <Route path="/events" component={EventsPage} />
-              {this.state.authUser && (
-                <Route path="/bookings" component={BookingsPage} />
-              )}
-              {this.state.authUser && (
-                <Route path="/create-event" component={CreateEventPage} />
-              )}
-              {!this.state.authUser && <Redirect to="/auth" exact />}
-            </Routes>
-          </main>
-        </AuthContext.Provider>
-      </BrowserRouter>
+      <AuthContext.Provider
+        value={{
+          authUser: this.state.authUser,
+          login: this.login,
+          logout: this.logout,
+        }}
+      >
+        {/* this is the menu bar */}
+        <MainNavigation />
+        <main className="main-content">
+          {' '}
+          {/* <main> is optional */}
+          <Routes>
+            {/* need to use exact on "/" */}
+            <Route index element={<EventsPage />} />
+            <Route path="auth" element={<AuthPage />} />
+            <Route path="events" element={<EventsPage />} />
+            <Route
+              path="bookings"
+              element={
+                <ProtectedRouteParent>
+                  <BookingsPage />
+                </ProtectedRouteParent>
+              }
+            />
+            <Route
+              path="create-event"
+              element={
+                <ProtectedRouteParent>
+                  <CreateEventPage />
+                </ProtectedRouteParent>
+              }
+            />
+            {/* This matches /(something) */}
+            <Route path="*" element={<NoMatch />} />
+          </Routes>
+        </main>
+      </AuthContext.Provider>
     );
   }
 }
 
 export default App;
-//                   <Route path="/create-event" component={CreateEventPage} />

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Navigate } from 'react-router-dom';
 import AuthContext from '../components/context/auth-context';
 import Spinner from '../components/spinner/Spinner';
 import './AuthPage.css';
@@ -10,6 +11,7 @@ class AuthPage extends Component {
     feedback: '',
     working: false,
   };
+
   /*
     from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
     STATIC PROPERTIES are useful for caches, fixed-configuration, 
@@ -39,6 +41,7 @@ class AuthPage extends Component {
     // Bind these vars to the Elements in the JSX with React ref prop
     this.emailEl = React.createRef();
     this.passwordEl = React.createRef();
+    // this.navigate = useNavigate();
   }
 
   switchModeHandler = () => {
@@ -152,8 +155,9 @@ class AuthPage extends Component {
             working: false,
           });
         } else if (
-          this.state.loginMode &&
+          // SUCCESSFUL LOGIN
           // if we were in login mode and we got back a token
+          this.state.loginMode &&
           resJson.data.login.tokenString
         ) {
           console.log('AuthPage login returned: ', resJson.data.login);
@@ -167,6 +171,7 @@ class AuthPage extends Component {
             resJson.data.login.tokenExpiration,
             resJson.data.login.email
           );
+
           // set up feedback to the u.i. logged in
           // console.log(
           //   'User logged in, token is: ',
@@ -174,8 +179,9 @@ class AuthPage extends Component {
           // );
           console.log('User logged in: ', resJson.data.login);
           this.setState({ working: false });
+          // this.navigate('/events');
         } else {
-          // we tried to create a user
+          // WE TRIED TO CREATE A USER
           // createUser will genererate a status of 200 on failure so check
           // if createUser is null
           if (resJson.data.createUser) {
@@ -217,7 +223,7 @@ class AuthPage extends Component {
               type="email"
               id="email"
               ref={this.emailEl}
-              placeholder={!this.state.loginMode && 'any@email.com'}
+              placeholder={!this.state.loginMode ? 'any@email.com' : undefined}
             ></input>
           </div>
           <div className="form-control">
@@ -227,7 +233,7 @@ class AuthPage extends Component {
               type="password"
               id="password"
               ref={this.passwordEl}
-              placeholder={!this.state.loginMode && 'any-password'}
+              placeholder={!this.state.loginMode ? 'any-password' : undefined}
             ></input>
           </div>
           <div className="form-actions">
@@ -243,6 +249,7 @@ class AuthPage extends Component {
           </div>
         </form>
         {this.state.working && <Spinner />}
+        {this.context.authUser?.token ? <Navigate to="/events" /> : undefined}
       </div>
     );
   }

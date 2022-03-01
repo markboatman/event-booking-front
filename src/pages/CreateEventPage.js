@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
+import { useNavigate } from 'react-router-dom';
 // import Backdrop from '../components/backdrop/Backdrop';
 // import EventList from '../components/events/EventList';
 import Modal from '../components/modal/Modal';
 import Spinner from '../components/spinner/Spinner';
 import AuthContext from '../components/context/auth-context';
 import './EventsPage.css';
+
+const withNavigation = (WrappedComponent) => (props) => {
+  const navigation = useNavigate();
+
+  return <WrappedComponent {...props} navigation={navigation} />;
+};
 
 class CreateEventPage extends Component {
   state = {
@@ -122,7 +129,8 @@ class CreateEventPage extends Component {
     // probably don't need this
     this.setState({ canCreate: false, created: false });
     // redirect to all events page
-    this.props.history.push('/events');
+    // useNavigate()('/events');
+    this.props.navigation('/events');
   };
 
   // React supplied
@@ -180,4 +188,4 @@ class CreateEventPage extends Component {
   }
 }
 
-export default CreateEventPage;
+export default withNavigation(CreateEventPage);
