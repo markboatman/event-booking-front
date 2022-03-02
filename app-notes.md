@@ -56,5 +56,3 @@ yarn global add serve
 
 Then exec from project folder that contains ./build:
 serve -s build
-
-
