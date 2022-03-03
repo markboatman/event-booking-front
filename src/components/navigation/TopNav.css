@@ -1,0 +1,160 @@
+:root {
+  /* --background-color: #ddae68; */
+  /* --headers-color: #5e3800; */
+  --nav-background-color: #619cd3;
+  --nav-color: white;
+  --input-background-color: #f0d4ab;
+  --a-active-color: rgb(113, 37, 211);
+}
+
+h3 {
+  margin: 1em;
+  color: purple;
+  font-size: medium;
+}
+.topnav {
+  display: flex;
+  flex-flow: row nowrap;
+  /* This will send the right main div to the right */
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  /* overflow: hidden; */
+  background-color: var(--nav-background-color);
+  z-index: 2;
+  opacity: 0.9;
+}
+
+.nav-div-left {
+  /* border: 2px solid red; */
+  justify-content: flex-start;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.nav-div-right {
+  /* border: 2px solid red; */
+  justify-content: flex-end;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+/* These are for NavLinks */
+.topnav a {
+  float: left;
+  display: block;
+  /* border: solid 2px yellow; */
+  color: var(--nav-color);
+  text-align: left;
+  padding: 10px;
+  /* border: 2px solid yellow; */
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav button {
+  /* float: right; */
+  padding: 10px;
+  font-size: 17;
+  color: var(--nav-color);
+  border: none;
+  background-color: var(--nav-background-color);
+}
+
+.topnav p {
+  margin-right: 1em;
+  color: purple;
+}
+
+.topnav a.active {
+  border-bottom: 2px solid var(--a-active-color);
+}
+
+.topnav a:hover,
+.topnav button:hover {
+  background-color: rgb(105, 96, 96);
+  color: white;
+}
+
+/* This is for the hamburger icon, assign styles but don't display */
+.hamburger {
+  display: none;
+  text-align: center;
+  padding: 8px 18px;
+  cursor: grab;
+}
+/* these bars are children of the hamburger div so not displayed */
+.bar1,
+.bar2,
+.bar3 {
+  width: 21px;
+  height: 3px;
+  background-color: white;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+.change .bar1 {
+  /* -webkit-transform: rotate(-45deg) translate(-9px, 6px); */
+  /* translate(right, down) */
+  transform: rotate(-45deg) translate(0px, 12px);
+}
+
+.change .bar2 {
+  /* hide this one when change */
+  opacity: 0;
+}
+
+.change .bar3 {
+  /* -webkit-transform: rotate(45deg) translate(-8px, -8px); */
+  transform: rotate(45deg) translate(0px, -12px);
+}
+
+@media screen and (max-width: 650px) {
+  .topnav a {
+    display: none;
+    width: 100%;
+    /* float: center; */
+    /* margin-left: 4em; */
+  }
+  .nav-div-left.responsive {
+    /* border: 2px solid red; */
+    width: 100%;
+    align-items: center;
+    flex-flow: column nowrap;
+  }
+
+  .nav-div-right.responsive {
+    /* border: 2px solid red; */
+    align-items: center;
+    width: 100%;
+    flex-flow: column nowrap;
+  }
+
+  .nav-div-right.responsive button {
+    width: 100%;
+  }
+
+  /* .class1.class2 means class1 class2 are in the className string */
+  .topnav.responsive {
+    align-items: start;
+    flex-flow: column nowrap;
+    position: relative;
+    overflow: hidden;
+    /* display: block; */
+  }
+  /* diplay the hamburger icon */
+  .hamburger {
+    display: inline-block;
+  }
+  /* decendent a, button, p */
+  .topnav.responsive a,
+  .topnav.responsive button,
+  .topnav.responsive p {
+    text-align: center;
+    display: block;
+  }
+}

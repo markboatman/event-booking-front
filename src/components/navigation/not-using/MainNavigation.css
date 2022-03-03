@@ -14,7 +14,8 @@
   padding: 0 1rem;
   /* direct children are now inline */
   display: flex;
-  /* if display is flex, centers on the y axix */
+  /* if display is flex and direction is row, 
+   centers on the y axix */
   align-items: center;
 }
 

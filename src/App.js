@@ -10,7 +10,8 @@ import BookingsPage from './pages/BookingsPage';
 import EventsPage from './pages/EventsPage';
 import NoMatch from './pages/NoMatch';
 import CreateEventPage from './pages/CreateEventPage';
-import MainNavigation from './components/navigation/MainNavigation';
+// import MainNavigation from './components/navigation/MainNavigation';
+import TopNav from './components/navigation/TopNav';
 
 class App extends Component {
   state = {
@@ -65,7 +66,7 @@ class App extends Component {
         }}
       >
         {/* this is the menu bar */}
-        <MainNavigation />
+        <TopNav />
         <main className="main-content">
           {' '}
           {/* <main> is optional */}
