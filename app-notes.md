@@ -1,7 +1,14 @@
-This is a react app.
+This is a CREATE REACT APP.
 The production build is running on firebase hosting at: https://event-booking-frontend.web.app
 
-Steps to produce:
+This app needs a graphql backend API. The URL of this api needs to be defined in the .env as REACT_APP_BACKEND_URL='https://someURL'. The code for the backend is in the sibling folder at event-booking-back. You can connect to a locally running backend or there is one running on heroku. But, need to set REACT_APP_BACKEND_URL accordingly.
+
+To RUN LOCALLY look at the package.json file for scripts or do this:
+npm start.
+
+The app will get events from the backend api defined by REACT_APP_BACKEND_URL in the .env file.
+
+STEPS TO BUILD A CREATE-REACT-APP (THIS APP):
 Create a root directory for the project.
 Go in the project dir and create a node_modules folder in the root dir and tell dropbox not to sync:
 
