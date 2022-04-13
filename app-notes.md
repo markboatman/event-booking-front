@@ -3,6 +3,8 @@ The production build is running on firebase hosting at: https://event-booking-fr
 
 This app needs a graphql backend API. The URL of this api needs to be defined in the .env as REACT_APP_BACKEND_URL='https://someURL'. The code for the backend is in the sibling folder at event-booking-back. You can connect to a locally running backend or there is one running on heroku. But, need to set REACT_APP_BACKEND_URL accordingly.
 
+this is a temp line
+
 To RUN LOCALLY look at the package.json file for scripts or do this:
 npm start.
 
