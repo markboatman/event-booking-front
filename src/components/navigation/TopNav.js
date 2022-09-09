@@ -30,6 +30,50 @@ const TopNav = (props) => {
     appendClassToElement('nav-div-rightId', 'nav-div-right', 'responsive');
   };
 
+  const backendLogout = (userToken) => {
+    console.log('TopNav backendLogout');
+    const reqBody = {
+      query: `
+        mutation {
+          logout {
+              result
+            }
+         }
+      `,
+    };
+
+    // using standard fetch
+    // this.setState({ working: true });
+    fetch(process.env.REACT_APP_BACKEND_URL + '/graphql', {
+      method: 'POST',
+      body: JSON.stringify(reqBody),
+      headers: {
+        // tell receiver what format we are sending
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`,
+      },
+    })
+      .then((res) => {
+        // console.log('res.status: ', res.status);
+        // add status === 500  check ?
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('TopNav backendLogout, request to server failed!');
+        }
+        // else
+        // parse the response to an object
+        return res.json();
+      })
+      .then((resJson) => {
+        // SUCCESS
+        console.log('TopNav backendLogout: ', resJson.data.logout.result);
+        // this.setState({ working: false });
+      })
+      .catch((err) => {
+        console.log('TopNav backendLogout error: ', err.message);
+        // this.setState({ working: false });
+      });
+  };
+
   return (
     <AuthContext.Consumer>
       {(context) => {
@@ -61,7 +105,13 @@ const TopNav = (props) => {
               {context.authUser && (
                 <React.Fragment>
                   <p id="user">User: {context.authUser.email.split('@')[0]}</p>
-                  <button id="logout" onClick={context.logout}>
+                  <button
+                    id="logout"
+                    onClick={() => {
+                      context.logout();
+                      backendLogout(context.authUser.token);
+                    }}
+                  >
                     Logout
                   </button>
                 </React.Fragment>

@@ -51,12 +51,13 @@ class AuthPage extends Component {
   };
 
   // class method def
-  // this will be called when onSubmit event happens
+  // this will be called when onSubmit event is triggered by submit
   submitHandler = (event) => {
     // Because this is an ARROW FUNCTION, 'this' will be bound correctly
     // preventDefault will prevent a req for the same page (url).
 
     event.preventDefault();
+    // <input> elements have a .value prop
     const email = this.emailEl.current.value;
     const password = this.passwordEl.current.value;
     // should do better valildation of inputs
@@ -73,7 +74,8 @@ class AuthPage extends Component {
     // default req will be login config
     let reqBody = {
       // NOTE wrapper Login mutation signature for injecting local var values
-      query: `
+      // using back ticks `??` so we can have a multi line string
+      query: ` 
         mutation Login( $email: String!, $password: String! ) {
           login(email: $email, password: $password) {
             userId
@@ -110,7 +112,7 @@ class AuthPage extends Component {
 
     /*
       On modern browsers, if you make a request to a different server ( i.e. a server
-      not running at localhost:3000) then the this server, localhost:3000, will check
+      NOT RUNNING at localhost:3000) then the current server, localhost:3000, will check
       the response to the fetch and look for response headers coming from localhost:4000
       stating that cross-origin requests are okay. Need to set this up on the graphql server
 
@@ -118,33 +120,44 @@ class AuthPage extends Component {
       use preview tab to view the graphql data
     */
     let gqlError = false;
-    // using standard fetch
+    // this is for the ui render
     this.setState({ working: true });
+    // using standard fetch
     fetch(process.env.REACT_APP_BACKEND_URL + '/graphql', {
-      // I think everything has to be a POST to graphql server
+      // every request has to be a POST to a graphql api
       // this post will either do a login or create user, depends
-      // on body contents
+      // reqBody string will determine this will got to the createUser
+      // or login qraphql req handler.
       method: 'POST',
+      // convert JS object to JSON string representation
       body: JSON.stringify(reqBody),
       headers: {
-        // tell receiver what format we are sending
+        // tell receiver the body will be a json string rep of an object
+        // receiver will need to JSON.parse() it to an object???
         'Content-Type': 'application/json',
       },
     })
       .then((res) => {
-        console.log('res.status: ', res.status);
-        console.log('res is: ', res);
+        // console.log('res.status: ', res.status);
+        // console.log('res is: ', res);
         // status is 500 if you attempt to login with a user that does not exist
-        // need to tell the front end, it is logged in the backend, need to put
+        // need to tell the front end, it is console.logged in the backend, need to put
         // error message on the res from the backend, 500 is a graphql error
         if (res.status !== 200 && res.status !== 201 && res.status !== 500) {
+          // Max checks for !200 and !201
+          this.setState({
+            working: false,
+            feedback: 'Request to server failed!',
+          });
           throw new Error('Request to server failed!');
         } else if (res.status === 500 /* && res.okay === false */) {
+          // TODO: generated a 500 from graphql
           // mutation or query error condition
           gqlError = true;
         }
-        // else
-        // this will return a promise so we can "then" it
+        // else should have good data, fetch api gives use
+        // the res.json() method to parse the json string
+        // on the body and tranlate it to a JS object
         return res.json();
       })
       .then((resJson) => {
@@ -160,7 +173,7 @@ class AuthPage extends Component {
           this.state.loginMode &&
           resJson.data.login.tokenString
         ) {
-          console.log('AuthPage login returned: ', resJson.data.login);
+          // console.log('AuthPage login returned: ', resJson.data.login);
           // login is put on the context in App.js
           // this call sets App.js's state
           this.context.login(
@@ -177,13 +190,14 @@ class AuthPage extends Component {
           //   'User logged in, token is: ',
           //   this.context.login.tokenString
           // );
-          console.log('User logged in: ', resJson.data.login);
+          // console.log('User logged in: ', resJson.data.login);
           this.setState({ working: false });
           // this.navigate('/events');
         } else {
           // WE TRIED TO CREATE A USER
           // createUser will genererate a status of 200 on failure so check
-          // if createUser is null
+          // On failure resJson.data.createUser exist but will be set to null
+          // Can check dev tools network tab for response on createUser req
           if (resJson.data.createUser) {
             console.log('User created: ', resJson.data.createUser);
             this.setState({
@@ -203,6 +217,7 @@ class AuthPage extends Component {
         }
       })
       .catch((err) => {
+        // These would be network errors, not server errors
         console.log(err.message);
       });
     //this.setState({ working: false });
