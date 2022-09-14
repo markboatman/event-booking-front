@@ -4,7 +4,7 @@
 
 - **This app** allows a user to create and book events. It accesses an express graphQL api running on heroku that uses mongoDB and mongoose to persist data related to users and events.
 
-- This frontend app is an enhanced version of the frontend code presented in this [tutorial](https://academind.com/tutorials/graphql-with-node-react-full-app).
+- This frontend app is an enhanced version this [tutorial](https://academind.com/tutorials/graphql-with-node-react-full-app).
 
 ### Run the app
 
@@ -16,5 +16,5 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser. T
 ### Build the app for production
 
 Type: 'npm build'
-Generates the app for production. Puts it in o the \`build\` folder.
+Generates the app for production. Puts it in the \`build\` folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
